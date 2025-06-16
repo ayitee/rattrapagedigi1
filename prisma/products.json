@@ -1,0 +1,226 @@
+[
+  {
+    "id": 1,
+    "name": "ATK 68 Magnetic Switch Gaming Keyboard",
+    "description": "Layout: 65% with 68 keys Structure: Tray mount Position Plate: Aluminum Material: CNC Aluminum Top Case, ABS Bottom Case RT Range: 0.1mm to 4.0mm in 0.1mm steps Keycaps: PBT Shine-through (Partial 5 Sided Dye-Sub)",
+    "photo": "/images/ATK68_Black.jpg.webp",
+    "price": 89.99
+  },
+  {
+    "id": 2,
+    "name": "ATK 68 V2 eSports Hall Effect Keyboard",
+    "description": "Layout: 65% with 68 Keys Structure: Tray Mount / Gasket Mount Position Plate: Aluminum Material: Full CNC Aluminum Case RT Range: 0.01mm to 3.3mm in 0.01 / 0.02mm Step Precision Keycaps: Cherry Profile PBT Shine-through (South-Facing)",
+    "photo": "/images/ATK68_V2_Blackberry.jpg.webp",
+    "price": 109.99
+  },
+  {
+    "id": 3,
+    "name": "ATK 75 Magnetic Switch Gaming Keyboard",
+    "description": "CNC Aluminum Top Case Aluminum Position Plate Game-Gasket / Hot Swap / NKRO Gateron II Magnetic Switch / ATK II Magnetic Switch 0.1~4.0 mm Fully Customizable Actuation Point Multi-layer Sound-dampening Filling PBT Shine-through Keycaps 16.8 Million RGB Light ATK HUB/Web Driver Supported",
+    "photo": "/images/ATK75_Black.jpg.webp",
+    "price": 119.99
+  },
+  {
+    "id": 4,
+    "name": "ATK 8K Wireless Dongle",
+    "description": "Compatible Only With: ATK Dragonfly A9 Ultra ATK Blazing Sky F1 Series ATK Blazing Sky Z1 Series ATK Blazing Sky X1 Pro / Pro Max / Ultra / Ultimate ATK Fierce X Series",
+    "photo": "/images/ATK_Wireless_8K_Dongle.jpg.webp",
+    "price": 29.99
+  },
+  {
+    "id": 5,
+    "name": "ATK 99G XSoft eSport Gaming Mousepad",
+    "description": "Softness: XSoft Edge Design: Recessed Edge Dimensions: 490 x 420 x 4.5mm / 490 x 420 x 4mm Surface Materia: Composite Blend Fiber Weave Base Material: Rubber Base / Korean Polyurethane",
+    "photo": "/images/ATK_99G_Air.jpg.webp",
+    "price": 9.99
+  },
+  {
+    "id": 6,
+    "name": "ATK Aluminum Alloy Keyboard Wrist Rest",
+    "description": "Base Material: Aluminum Alloy Surface Material: PU leather Design: Chamfered Edges Dimensions: 320.6mm x 70mm x 15.8mm",
+    "photo": "/images/ATK_Aluminum_Alloy_Keyboard_Wrist_Rest.jpg.webp",
+    "price": 19.99
+  },
+  {
+    "id": 7,
+    "name": "ATK Blaze XSoft eSport Gaming Mousepad",
+    "description": "Softness: XSoft Edge Design: Recessed Edge Dimensions: 490 x 420 x 5mm / 490 x 420 x 4mm Surface Materia: Composite Blend Fiber Weave Base Material: Rubber Base / Korean Polyurethane",
+    "photo": "/images/ATK_Blaze_XSoft_eSport_Gaming_Mousepad.jpg.webp",
+    "price": 17.99
+  },
+  {
+    "id": 8,
+    "name": "ATK Blazing Sky F1 Extreme Esports Wireless Mouse - LEVIATAN Collaboration",
+    "description": "Sensor: PAW3950 Ultra MCU: Nordic 52840 Polling Rate: 125-8000Hz (Adjustable) Weight: 35±2g Coating: Ice-feeling Dimensions: 118.2mm x 62.4mm x 38.8mm",
+    "photo": "/images/ATK_F1_Extreme_Leviatan.jpg.webp",
+    "price": 89.0
+  },
+  {
+    "id": 9,
+    "name": "ATK Blazing Sky F1 Series Wireless Mouse",
+    "description": "Sensor: PAW3950 / PAW3950 Ultra MCU: Nordic 52840 Polling Rate: 125-8000Hz (Adjustable) Weight: 35g-50g (Varies by Model) Coating: Ice-feeling Dimensions: 118.2mm x 62.4mm x 38.8mm",
+    "photo": "/images/ATK_Blazing_Sky_F1_White.jpg.webp",
+    "price": 74.99
+  },
+  {
+    "id": 10,
+    "name": "ATK Blazing Sky X1 Series Wireless Mouse",
+    "description": "Connectivity: NearLink / 2.4G / Bluetooth / Wired Polling Rate: 125-8000Hz (Adjustable) Weight: 49g-54g (Varies by Model) Dimensions: 127mm x 64mm x 40mm",
+    "photo": "/images/ATK_Blazing_Sky_X1_White.jpg.webp",
+    "price": 29.98
+  },
+  {
+    "id": 11,
+    "name": "ATK Blazing Sky Z1 Series Wireless Mouse",
+    "description": "Sensor: PAW3950 / PAW3950 Ultra MCU: Nordic 52840 Polling Rate: 125-8000Hz (Adjustable) Weight: 53g-57g (Varies by Model) Coating: Ice-feeling Dimensions: 122.5mm x 66.8mm x 42.4mm",
+    "photo": "/images/ATK_Blazing_Sky_Z1_White.jpg.webp",
+    "price": 69.99
+  },
+  {
+    "id": 12,
+    "name": "ATK Dragonfly A9 Series Lightweight Wireless Mouse",
+    "description": "Lightweight wireless gaming mouse with ergonomic design and high-performance sensor for competitive gaming",
+    "photo": "/images/ATK_Dragonfly_A9_Pink.jpg.webp",
+    "price": 24.98
+  },
+  {
+    "id": 13,
+    "name": "ATK EDGE 60 HE Esports Magnetic Keyboard - LEVIATAN Collaboration",
+    "description": "Layout: 60% with 61 Keys Structure: Top Mount Material: Two-Tone Anodized Aluminum Alloy Case RT Range: 0.01/0.001mm to 3.3mm in 0.01/0.005/0.001 Step Precision Keycaps: PBT + Dye Sublimation, Cherry Profile",
+    "photo": "/images/ATK_Edge_60_HE.jpg.webp",
+    "price": 199.0
+  },
+  {
+    "id": 14,
+    "name": "ATK EDGE 60HE Surprise Bonus Pack",
+    "description": "Special bonus pack for ATK EDGE 60HE keyboard enthusiasts with exclusive accessories and upgrades",
+    "photo": "/images/EDGE_60HE_Extreme_Edition_Surprise_Bonus_Pack.jpg.webp",
+    "price": 69.0
+  },
+  {
+    "id": 15,
+    "name": "ATK EDGE 60HE ULTIMATE Esports Magnetic Keyboard - LEVIATAN Collaboration",
+    "description": "Layout: 60% with 61 Keys Structure: Top Mount Material: Two-Tone Anodized Aluminum Alloy Case RT Range: 0.001mm to 3.3mm in 0.001 Step Precision Keycaps: PBT + Dye Sublimation, Cherry Profile",
+    "photo": "/images/ATK_Edge_60_HE.jpg.webp",
+    "price": 229.0
+  },
+  {
+    "id": 16,
+    "name": "ATK FIERCE X Lightweight Magnesium Alloy Gaming Mouse",
+    "description": "Sensor: PAW3950 Ultra MCU: Nordic 52840 Polling Rate: 125-8000Hz (Adjustable) Weight: 42±2g Dimensions: 119.57mm x 60.99mm x 36.26mm",
+    "photo": "/images/ATK_Fierce_X_Black.jpg.webp",
+    "price": 89.99
+  },
+  {
+    "id": 17,
+    "name": "ATK Mercury I eSports Wireless Tri-mode Headset",
+    "description": "Gaming headset with tri-mode wireless connectivity (2.4G/Bluetooth/Wired), premium audio drivers, crystal-clear microphone, and RGB lighting. Built for comfort during extended gaming sessions.",
+    "photo": "https://www.atk.store/products/atk-mercury-i-esports-wireless-tri-mode-headset",
+    "price": 39.99
+  },
+  {
+    "id": 18,
+    "name": "ATK Micro-Etched Tempered Glass Gaming Mousepad",
+    "description": "Material: High-Strength Tempered Glass Coating: Micro-Etched Coating Corner Design: Rounded Corners Dimensions: 360mm x 300mm x 4mm",
+    "photo": "https://www.atk.store/products/atk-micro-etched-tempered-glass-mouse-pad",
+    "price": 39.99
+  },
+  {
+    "id": 19,
+    "name": "ATK Nano 1K Wireless Dongle",
+    "description": "Compatible with ATK Blazing Sky Series (not compatible with Blazing Sky X1 Standard Model) and ATK A9 Ultra. Ultra-compact wireless receiver for enhanced gaming performance.",
+    "photo": "https://www.atk.store/products/atk-nano-1k-wireless-dongle",
+    "price": 9.90
+  },
+  {
+    "id": 20,
+    "name": "ATK RS6 Aluminum Hall Effect Keyboard",
+    "description": "Layout: 65% with 68 Keys Position Plate: Aluminum Material: 220 Mesh Anodized / Powder Coated Aluminum Case RT Range: 0.001mm to 3.3mm in 0.001mm Step Precision Keycaps: Double-Shot / Dye-Sub Cherry Profile PBT",
+    "photo": "https://www.atk.store/products/atk-rs6-aluminum-hall-effect-keyboard",
+    "price": 139.98
+  },
+  {
+    "id": 21,
+    "name": "ATK × ASPAS RS6 Ultra Aluminum Hall Effect Keyboard",
+    "description": "Same as Aspas' Tournament Edition Innovative Original Mecha-Style Design ATK Blazing Wind Magnetic Switch Solution ATK Proprietary Multi-Layer PCB Champion Presets & Music Rhythm Effects Comes with Aspas Custom Transparent Keycaps",
+    "photo": "https://www.atk.store/products/atk-aspas-rs6-ultra-aluminum-hall-effect-keyboard",
+    "price": 179.99
+  },
+  {
+    "id": 22,
+    "name": "ATK 68 Magnetic Switch Gaming Keyboard - White",
+    "description": "Layout: 65% with 68 keys Structure: Tray mount Position Plate: Aluminum Material: CNC Aluminum Top Case, ABS Bottom Case RT Range: 0.1mm to 4.0mm in 0.1mm steps Keycaps: PBT Shine-through (Partial 5 Sided Dye-Sub) - White Edition",
+    "photo": "https://www.atk.store/products/atk-68-magnetic-switch-gaming-keyboard",
+    "price": 89.99
+  },
+  {
+    "id": 23,
+    "name": "ATK 68 Magnetic Switch Gaming Keyboard - Armored Limited Edition",
+    "description": "Layout: 65% with 68 keys Structure: Tray mount Position Plate: Aluminum Material: CNC Aluminum Top Case, ABS Bottom Case RT Range: 0.1mm to 4.0mm in 0.1mm steps Keycaps: PBT Shine-through (Partial 5 Sided Dye-Sub) - Limited Armored Edition",
+    "photo": "https://www.atk.store/products/atk-68-magnetic-switch-gaming-keyboard",
+    "price": 89.99
+  },
+  {
+    "id": 24,
+    "name": "ATK 68 V2 eSports Hall Effect Keyboard - Blue-White Side Print",
+    "description": "Layout: 65% with 68 Keys Structure: Tray Mount / Gasket Mount Position Plate: Aluminum Material: Full CNC Aluminum Case RT Range: 0.01mm to 3.3mm in 0.01 / 0.02mm Step Precision Keycaps: Cherry Profile PBT Shine-through (South-Facing) - Blue-White Side Print",
+    "photo": "https://www.atk.store/products/atk-68-v2-esports-hall-effect-keyboard",
+    "price": 109.99
+  },
+  {
+    "id": 25,
+    "name": "ATK 68 V2 eSports Hall Effect Keyboard - Silver-Blue",
+    "description": "Layout: 65% with 68 Keys Structure: Tray Mount / Gasket Mount Position Plate: Aluminum Material: Full CNC Aluminum Case RT Range: 0.01mm to 3.3mm in 0.01 / 0.02mm Step Precision Keycaps: Cherry Profile PBT Shine-through (South-Facing) - Silver-Blue Edition",
+    "photo": "https://www.atk.store/products/atk-68-v2-esports-hall-effect-keyboard",
+    "price": 109.99
+  },
+  {
+    "id": 26,
+    "name": "ATK 68 V2 eSports Hall Effect Keyboard - Black-Orange",
+    "description": "Layout: 65% with 68 Keys Structure: Tray Mount / Gasket Mount Position Plate: Aluminum Material: Full CNC Aluminum Case RT Range: 0.01mm to 3.3mm in 0.01 / 0.02mm Step Precision Keycaps: Cherry Profile PBT Shine-through (South-Facing) - Black-Orange Edition",
+    "photo": "https://www.atk.store/products/atk-68-v2-esports-hall-effect-keyboard",
+    "price": 109.99
+  },
+  {
+    "id": 27,
+    "name": "ATK 75 Magnetic Switch Gaming Keyboard - White",
+    "description": "CNC Aluminum Top Case Aluminum Position Plate Game-Gasket / Hot Swap / NKRO Gateron II Magnetic Switch / ATK II Magnetic Switch 0.1~4.0 mm Fully Customizable Actuation Point Multi-layer Sound-dampening Filling PBT Shine-through Keycaps 16.8 Million RGB Light ATK HUB/Web Driver Supported - White Edition",
+    "photo": "https://www.atk.store/products/atk-75-magnetic-switch-gaming-keyboard",
+    "price": 119.99
+  },
+  {
+    "id": 28,
+    "name": "ATK Blazing Sky X1 Series Wireless Mouse - Metallic Red",
+    "description": "Connectivity: NearLink / 2.4G / Bluetooth / Wired Polling Rate: 125-8000Hz (Adjustable) Weight: 49g-54g (Varies by Model) Dimensions: 127mm x 64mm x 40mm - Metallic Red Edition",
+    "photo": "https://www.atk.store/products/atk-blazing-sky-x1-series-wireless-mouse",
+    "price": 29.98
+  },
+  {
+    "id": 29,
+    "name": "ATK Blazing Sky X1 Series Wireless Mouse - Metallic Purple",
+    "description": "Connectivity: NearLink / 2.4G / Bluetooth / Wired Polling Rate: 125-8000Hz (Adjustable) Weight: 49g-54g (Varies by Model) Dimensions: 127mm x 64mm x 40mm - Metallic Purple Edition",
+    "photo": "https://www.atk.store/products/atk-blazing-sky-x1-series-wireless-mouse",
+    "price": 29.98
+  },
+  {
+    "id": 30,
+    "name": "ATK Blazing Sky Z1 Series Wireless Mouse - Orange",
+    "description": "Sensor: PAW3950 / PAW3950 Ultra MCU: Nordic 52840 Polling Rate: 125-8000Hz (Adjustable) Weight: 53g-57g (Varies by Model) Coating: Ice-feeling Dimensions: 122.5mm x 66.8mm x 42.4mm - Orange Edition",
+    "photo": "https://www.atk.store/products/atk-blazing-sky-z1-series-wireless-mouse",
+    "price": 69.99
+  },
+  {
+    "id": 31,
+    "name": "ATK Dragonfly A9 Series Lightweight Wireless Mouse - Pink",
+    "description": "Lightweight wireless gaming mouse with ergonomic design, high-performance sensor for competitive gaming, and premium pink finish. Ultra-light construction for enhanced precision.",
+    "photo": "https://www.atk.store/products/atk-dragonfly-a9-series-lightweight-wireless-mouse",
+    "price": 24.98
+  },
+  {
+    "id": 32,
+    "name": "ATK RS6 Aluminum Hall Effect Keyboard - Night Hunter (ATK × ASPAS)",
+    "description": "Layout: 65% with 68 Keys Position Plate: Aluminum Material: 220 Mesh Anodized / Powder Coated Aluminum Case RT Range: 0.001mm to 3.3mm in 0.001mm Step Precision Keycaps: Double-Shot / Dye-Sub Cherry Profile PBT - Night Hunter ATK × ASPAS Collaboration",
+    "photo": "https://www.atk.store/products/atk-rs6-aluminum-hall-effect-keyboard",
+    "price": 139.98
+  }
+]

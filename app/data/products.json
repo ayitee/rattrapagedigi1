@@ -1,0 +1,36 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "ATK Fierce X Black",
+      "description": "High-precision gaming mouse with customizable DPI settings",
+      "price": 79.99,
+      "image": "/images/ATK_Fierce_X_Black.jpg.webp",
+      "category": "Mouse"
+    },
+    {
+      "id": 2,
+      "name": "ATK Edge 60 HE",
+      "description": "RGB mechanical keyboard with Cherry MX switches",
+      "price": 149.99,
+      "image": "/images/ATK_Edge_60_HE.jpg.webp",
+      "category": "Keyboard"
+    },
+    {
+      "id": 3,
+      "name": "ATK Dragonfly A9 Pink",
+      "description": "7.1 surround sound gaming headset with noise-cancelling mic",
+      "price": 129.99,
+      "image": "/images/ATK_Dragonfly_A9_Pink.jpg.webp",
+      "category": "Audio"
+    },
+    {
+      "id": 4,
+      "name": "ATK Blazing Sky F1 White",
+      "description": "High-performance gaming mouse with ultra-lightweight design",
+      "price": 89.99,
+      "image": "/images/ATK_Blazing_Sky_F1_White.jpg.webp",
+      "category": "Mouse"
+    }
+  ]
+} 
