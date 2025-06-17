@@ -1,20 +1,11 @@
 import Link from 'next/link';
+import Header from './components/Header';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-black flex flex-col">
       {/* Header */}
-      <header className="flex justify-between items-center p-6 border-b border-gray-200">
-        <h1 className="text-xl font-semibold tracking-wide">Vellux</h1>
-        <nav>
-          <ul className="flex space-x-6 text-sm font-medium">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/products">Products</Link></li>
-            <li><Link href="/cart">Cart</Link></li>
-            <li><Link href="/login">Login</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="flex flex-col justify-center items-center flex-grow p-12 text-center max-w-4xl mx-auto">

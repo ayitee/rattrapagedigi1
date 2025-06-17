@@ -3,6 +3,7 @@ import { promises as fs } from 'fs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SwitchSelector, QuantitySelector } from '../../components/SwitchAndQuantitySelectors';
+import Header from '../../components/Header';
 
 async function getProduct(id: number) {
   const filePath = path.join(process.cwd(), 'prisma/products.json');
@@ -39,9 +40,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
   // Extract bullet points from description if possible (for demo, split by '•' or fallback to full desc)
   let details: string[] = [];
   if (product.description.includes('•')) {
-    details = product.description.split('•').map(s => s.trim()).filter(Boolean);
+    details = product.description.split('•').map((s: string) => s.trim()).filter(Boolean);
   } else if (product.description.includes(' - ')) {
-    details = product.description.split(' - ').map(s => s.trim()).filter(Boolean);
+    details = product.description.split(' - ').map((s: string) => s.trim()).filter(Boolean);
   } else {
     details = [product.description];
   }
@@ -49,17 +50,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
   return (
     <main className="min-h-screen bg-white text-black flex flex-col">
       {/* Header */}
-      <header className="flex justify-between items-center p-6 border-b border-gray-200">
-        <h1 className="text-xl font-semibold tracking-wide">Vellux</h1>
-        <nav>
-          <ul className="flex space-x-6 text-sm font-medium">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/products">Products</Link></li>
-            <li><Link href="/cart">Cart</Link></li>
-            <li><Link href="/login">Login</Link></li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       <div className="max-w-5xl mx-auto w-full p-8">
         <div className="flex flex-col md:flex-row gap-12">
