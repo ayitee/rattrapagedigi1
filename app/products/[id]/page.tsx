@@ -1,25 +1,44 @@
-import path from 'path';
-import { promises as fs } from 'fs';
+'use client';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { SwitchSelector, QuantitySelector } from '../../components/SwitchAndQuantitySelectors';
 import Header from '../../components/Header';
-
-async function getProduct(id: number) {
-  const filePath = path.join(process.cwd(), 'prisma/products.json');
-  const data = await fs.readFile(filePath, 'utf-8');
-  const products = JSON.parse(data);
-  return products.find((p: any) => p.id === id);
-}
+import { useCart } from '../../context/CartContext';
+import { useState, useEffect } from 'react';
 
 const switches = [
   'Gateron II Magnetic Switch',
   'ATK II Magnetic Switch',
 ];
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(Number(params.id));
-  if (!product) notFound();
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [showAdded, setShowAdded] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(false);
+    fetch(`/api/products/${params.id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Not found');
+        return res.json();
+      })
+      .then(data => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, [params.id]);
+
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
+  if (error || !product) return notFound();
 
   // Example Q&A data (replace with real data if available)
   const qna = [
@@ -66,9 +85,26 @@ export default async function ProductPage({ params }: { params: { id: string } }
               {details.map((d, i) => <li key={i}>{d}</li>)}
             </ul>
             {/* Switches selection (frontend only) */}
-            <SwitchSelector switches={switches} />
+            {product.type === 'keyboard' && <SwitchSelector switches={switches} />}
             {/* Quantity selector (frontend only) */}
-            <QuantitySelector price={product.price} />
+            <div className="mb-4">
+              <QuantitySelector price={product.price} value={quantity} onChange={setQuantity} />
+            </div>
+            <button
+              className="px-6 py-3 bg-black text-white rounded font-semibold hover:bg-gray-800 transition mb-4"
+              onClick={() => {
+                addToCart({ id: product.id, name: product.name, price: product.price, photo: product.photo }, quantity);
+                setShowAdded(product.name);
+                setTimeout(() => setShowAdded(null), 2000);
+              }}
+            >
+              Add to Cart
+            </button>
+            {showAdded && (
+              <div className="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded shadow text-center font-semibold animate-fade-in">
+                {showAdded} added to cart
+              </div>
+            )}
           </div>
         </div>
         {/* Description below */}

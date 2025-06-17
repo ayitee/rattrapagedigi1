@@ -81,7 +81,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
       <Header />
 
       {/* Products Grid Section */}
-      <section className="flex-grow p-12 max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-8">
+      <section className="flex-grow px-4 py-12 max-w-[80vw] mx-auto w-full flex flex-col md:flex-row gap-8">
         {/* Sidebar for sorting/filtering */}
         <aside className="mb-8 md:mb-0 md:w-48 flex-shrink-0">
           <div className="sticky top-24">
