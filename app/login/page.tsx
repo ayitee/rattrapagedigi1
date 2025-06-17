@@ -14,11 +14,13 @@ export default function LoginPage() {
     const form = e.currentTarget;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+    
     const res = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
+    
     if (res?.error) {
       setLoginError('Invalid email or password.');
     } else {
@@ -35,11 +37,13 @@ export default function LoginPage() {
     const lastname = (form.elements.namedItem('lastname') as HTMLInputElement).value;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+    
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ firstname, lastname, email, password }),
     });
+    
     const data = await res.json();
     if (!res.ok) {
       setRegisterError(data.error || 'Registration failed.');
