@@ -61,17 +61,26 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-white text-black">
+    <main className="min-h-screen flex flex-col bg-transparent text-white relative overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 -z-10">
+        <img
+          src="/background.jpeg"
+          alt="Background"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
       <Header />
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-8 p-8 flex-grow">
         {/* Left: Product Edit Form */}
-        <section className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-lg shadow-md p-6 flex flex-col">
+        <section className="w-full max-w-md glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-6 flex flex-col">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">{isAdding ? 'Add Product' : 'Edit Product'}</h2>
+            <h2 className="text-2xl font-bold text-white">{isAdding ? 'Add Product' : 'Edit Product'}</h2>
             <button
               type="button"
-              className="px-4 py-2 rounded !bg-green-600 text-white font-bold !border !border-green-700 shadow hover:!bg-green-700 transition text-base"
-              style={{ backgroundColor: '#16a34a', borderColor: '#15803d' }}
+              className="px-4 py-2 rounded bg-green-700 text-white font-bold border border-green-700 shadow hover:bg-green-800 transition text-base"
               onClick={() => {
                 setIsAdding(true);
                 setSelectedProductId(null);
@@ -82,31 +91,31 @@ export default function AdminProductsPage() {
           </div>
           {editForm ? (
             <form className="flex flex-col gap-4">
-              <label className="font-semibold">Name
+              <label className="font-semibold text-white">Name
                 <input
-                  className="mt-1 w-full border rounded px-3 py-2"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
                   value={editForm.name || ''}
                   onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                 />
               </label>
-              <label className="font-semibold">Price
+              <label className="font-semibold text-white">Price
                 <input
                   type="number"
-                  className="mt-1 w-full border rounded px-3 py-2"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
                   value={editForm.price || ''}
                   onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
                 />
               </label>
-              <label className="font-semibold">Description
+              <label className="font-semibold text-white">Description
                 <textarea
-                  className="mt-1 w-full border rounded px-3 py-2 min-h-[80px]"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 min-h-[80px] bg-white/10 text-white placeholder:text-gray-300"
                   value={editForm.description || ''}
                   onChange={e => setEditForm({ ...editForm, description: e.target.value })}
                 />
               </label>
-              <label className="font-semibold">Image URL
+              <label className="font-semibold text-white">Image URL
                 <input
-                  className="mt-1 w-full border rounded px-3 py-2"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
                   value={editForm.photo || editForm.image || ''}
                   onChange={e => setEditForm({ ...editForm, photo: e.target.value })}
                 />
@@ -131,7 +140,7 @@ export default function AdminProductsPage() {
                 )}
                 <button
                   type="button"
-                  className="px-4 py-2 rounded bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+                  className="px-4 py-2 rounded bg-white/10 text-white font-semibold hover:bg-white/20 transition"
                   onClick={() => {
                     if (isAdding) {
                       setIsAdding(false);
@@ -160,21 +169,21 @@ export default function AdminProductsPage() {
               </div>
             </form>
           ) : (
-            <div className="text-gray-500">Select a product to edit.</div>
+            <div className="text-white/70">Select a product to edit.</div>
           )}
         </section>
         {/* Right: Product List */}
-        <section className="flex-1">
-          <h2 className="text-2xl font-bold mb-6">Products</h2>
+        <section className="flex-1 glassmorphic bg-white/10 rounded-2xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 text-white">Products</h2>
           {loadingProducts ? (
             <div>Loading products...</div>
           ) : error ? (
-            <div className="text-red-600 font-bold">{error}</div>
+            <div className="text-red-400 font-bold">{error}</div>
           ) : (
             <>
-            <table className="w-full border border-gray-200 rounded-lg shadow-md">
+            <table className="w-full rounded-xl overflow-hidden border border-white/20 shadow-md bg-white/10 text-white">
                 <thead>
-                  <tr className="bg-gray-100">
+                  <tr className="bg-white/10">
                     <th className="py-3 px-4 text-left">ID</th>
                     <th className="py-3 px-4 text-left">Image</th>
                     <th className="py-3 px-4 text-left">Name</th>
@@ -185,15 +194,15 @@ export default function AdminProductsPage() {
                  {paginatedProducts.map((product, idx) => (
                     <tr
                       key={product.id}
-                      className={`border-t transition-colors cursor-pointer ${selectedProductId === product.id ? 'bg-blue-50' : idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-100`}
+                      className={`border-t border-white/10 transition-colors cursor-pointer ${selectedProductId === product.id ? 'bg-white/20' : idx % 2 === 0 ? 'bg-transparent' : 'bg-white/10'} hover:bg-white/10`}
                       onClick={() => setSelectedProductId(product.id)}
                     >
-                      <td className="py-2 px-4 font-mono text-xs text-gray-500">{product.id}</td>
+                      <td className="py-2 px-4 font-mono text-xs text-white/70">{product.id}</td>
                       <td className="py-2 px-4">
-                        <img src={product.photo || product.image} alt={product.name} className="w-12 h-12 object-cover rounded shadow border" />
+                        <img src={product.photo || product.image} alt={product.name} className="w-12 h-12 object-cover rounded shadow border border-white/20" />
                       </td>
                       <td className="py-2 px-4 font-semibold">
-                        <Link href={`/products/${product.id}`} className="text-blue-700 underline hover:text-blue-900" target="_blank" rel="noopener noreferrer">
+                        <Link href={`/products/${product.id}`} className="text-blue-300 underline hover:text-blue-100" target="_blank" rel="noopener noreferrer">
                           {product.name}
                         </Link>
                       </td>
@@ -205,15 +214,15 @@ export default function AdminProductsPage() {
             {/* Pagination Controls */}
             <div className="flex justify-center items-center gap-4 mt-6">
               <button
-                className={`px-4 py-2 border rounded ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-black hover:text-white transition'}`}
+                className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 Previous
               </button>
-              <span className="text-sm">Page {currentPage} of {totalPages}</span>
+              <span className="text-sm text-white/90 glassmorphic px-4 py-2 rounded border border-white/20">Page {currentPage} of {totalPages}</span>
               <button
-                className={`px-4 py-2 border rounded ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-black hover:text-white transition'}`}
+                className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
@@ -224,7 +233,7 @@ export default function AdminProductsPage() {
           )}
         </section>
       </div>
-      <footer className="border-t border-gray-200 p-6 text-center text-xs text-gray-500 w-full mt-auto">
+      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
         &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
       </footer>
     </main>

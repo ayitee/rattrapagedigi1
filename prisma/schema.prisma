@@ -14,12 +14,22 @@ model User {
   password  String
   createdAt DateTime @default(now())
   role      String   @default("user") // 'user', 'admin', 'superadmin'
+  orders    Order[]
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
-  description String  @db.Text
+  description String @db.Text
   photo       String
   price       Float
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  totalPrice   Float
+  creationDate DateTime @default(now())
+  products     Json
+  userId       Int? // optional, if you want to link to User
+  user         User?    @relation(fields: [userId], references: [id])
 }

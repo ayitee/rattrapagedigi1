@@ -92,22 +92,24 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
       <Header />
 
       {/* Products Grid Section */}
-      <section className="flex-grow px-4 py-12 max-w-[80vw] mx-auto w-full flex flex-col md:flex-row gap-8">
+      <section className="flex-grow px-2 py-12 max-w-[90vw] mx-auto w-full flex flex-col md:flex-row gap-8">
         {/* Sidebar for sorting/filtering */}
-        <aside className="mb-8 md:mb-0 md:w-48 flex-shrink-0">
-          <div className="sticky top-24">
-            <h3 className="text-lg font-bold mb-4">Product Type</h3>
+        <aside className="mb-8 md:mb-0 md:w-72 flex-shrink-0">
+          <div className="sticky top-24 glassmorphic p-6 rounded-2xl shadow-lg border border-white/20">
+            <h3 className="text-lg font-bold mb-4 text-white">Product Type</h3>
             <ul className="space-y-2 mb-8">
               <li>
                 {(() => {
-                  const allQuery: Record<string, any> = { ...searchParams, page: 1 };
-                  Object.keys(allQuery).forEach((key: string) => {
-                    if (allQuery[key] === undefined || allQuery[key] === '') delete allQuery[key];
+                  // Only keep string values in allQuery
+                  const allQuery: Record<string, string> = {};
+                  Object.entries(searchParams).forEach(([key, value]) => {
+                    if (typeof value === 'string') allQuery[key] = value;
                   });
+                  allQuery.page = '1';
                   return (
                     <Link
                       href={{ pathname: '/products', query: allQuery }}
-                      className={`block px-4 py-2 rounded transition font-medium ${!typeQuery ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-900'}`}
+                      className={`block px-4 py-2 rounded transition font-medium ${!typeQuery ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
                     >
                       All
                     </Link>
@@ -115,15 +117,18 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
                 })()}
               </li>
               {types.map((type: any) => {
-                const typeQueryObj: Record<string, any> = { ...searchParams, type, page: 1 };
-                Object.keys(typeQueryObj).forEach((key: string) => {
-                  if (typeQueryObj[key] === undefined || typeQueryObj[key] === '') delete typeQueryObj[key];
+                // Only keep string values in typeQueryObj
+                const typeQueryObj: Record<string, string> = {};
+                Object.entries(searchParams).forEach(([key, value]) => {
+                  if (typeof value === 'string') typeQueryObj[key] = value;
                 });
+                typeQueryObj.type = type;
+                typeQueryObj.page = '1';
                 return (
                   <li key={type}>
                     <Link
                       href={{ pathname: '/products', query: typeQueryObj }}
-                      className={`block px-4 py-2 rounded transition font-medium ${typeQuery === type ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-900'}`}
+                      className={`block px-4 py-2 rounded transition font-medium ${typeQuery === type ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
                     >
                       {type}
                     </Link>
@@ -136,8 +141,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
               {/* Keep other filters in the query */}
               {typeQuery && <input type="hidden" name="type" value={typeQuery} />}
               <input type="hidden" name="search" value={getSearchParam(searchParams)} />
-              <h3 className="text-lg font-bold mb-2">Price Range</h3>
-              <div className="flex items-center justify-between text-sm mb-2">
+              <h3 className="text-lg font-bold mb-2 text-white">Price Range</h3>
+              <div className="flex items-center justify-between text-sm mb-2 text-white">
                 <span>${selectedMin}</span>
                 <span>${selectedMax}</span>
               </div>
@@ -162,38 +167,38 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
                 />
               </div>
               <div className="flex items-center justify-between mt-4 mb-2">
-                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white">
-                  <span className="text-gray-500 mr-1">$</span>
+                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
+                  <span className="text-gray-200 mr-1">$</span>
                   <input
                     type="number"
                     name="minPrice"
                     min={minPrice}
                     max={selectedMax}
                     defaultValue={selectedMin}
-                    className="w-16 text-center outline-none bg-transparent"
+                    className="w-16 text-center outline-none bg-transparent text-white"
                   />
                 </div>
-                <span className="mx-2 text-gray-700">to</span>
-                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white">
-                  <span className="text-gray-500 mr-1">$</span>
+                <span className="mx-2 text-gray-200">to</span>
+                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
+                  <span className="text-gray-200 mr-1">$</span>
                   <input
                     type="number"
                     name="maxPrice"
                     min={selectedMin}
                     max={maxPrice}
                     defaultValue={selectedMax}
-                    className="w-16 text-center outline-none bg-transparent"
+                    className="w-16 text-center outline-none bg-transparent text-white"
                   />
                 </div>
               </div>
-              <button type="submit" className="mt-3 w-full px-4 py-2 rounded bg-black text-white font-medium hover:bg-gray-800 transition">Apply</button>
+              <button type="submit" className="mt-3 w-full px-4 py-2 rounded bg-white/20 text-white font-medium hover:bg-white/30 transition">Apply</button>
             </form>
           </div>
         </aside>
         {/* Products grid */}
         <div className="flex-1">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold tracking-tight">Products</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-white">Products</h2>
             {/* Search Bar */}
             <form className="flex" action="/products" method="get">
               <input
@@ -201,11 +206,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
                 name="search"
                 defaultValue={getSearchParam(searchParams)}
                 placeholder="Search products..."
-                className="border border-gray-300 rounded-l px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-black"
+                className="border border-gray-300 rounded-l px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-white bg-white/10 text-white placeholder:text-gray-300"
               />
               <button
                 type="submit"
-                className="px-4 py-2 border border-black border-l-0 rounded-r bg-black text-white font-medium hover:bg-gray-800 transition"
+                className="px-4 py-2 border border-white border-l-0 rounded-r bg-white/20 text-white font-medium hover:bg-white/30 transition"
               >
                 Search
               </button>
@@ -216,12 +221,12 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
               <Link
                 key={product.id}
                 href={`/products/${product.id}`}
-                className="bg-white rounded-lg p-4 flex flex-col items-center text-center shadow transition-transform duration-200 transform hover:scale-105 hover:border-2 hover:border-black border border-transparent cursor-pointer"
+                className="glassmorphic bg-white/10 p-4 flex flex-col items-center text-center transition-transform duration-200 transform hover:scale-105 hover:shadow-2xl border border-white/20 cursor-pointer rounded-2xl"
                 prefetch={false}
               >
                 <img src={product.photo} alt={product.name} className="w-32 h-32 object-cover mb-4 rounded" />
-                <h3 className="text-lg font-semibold mb-1 line-clamp-2">{product.name}</h3>
-                <div className="font-bold mb-2">${product.price.toFixed(2)}</div>
+                <h3 className="text-lg font-semibold mb-1 line-clamp-2 text-white">{product.name}</h3>
+                <div className="font-bold mb-2 text-white">${product.price.toFixed(2)}</div>
               </Link>
             ))}
           </div>
@@ -229,15 +234,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
           <div className="flex justify-center items-center gap-4 mt-12">
             <Link
               href={`/products?page=${currentPage - 1}${searchQuery ? `&search=${encodeURIComponent(getSearchParam(searchParams))}` : ''}${typeQuery ? `&type=${encodeURIComponent(typeQuery)}` : ''}`}
-              className={`px-4 py-2 border rounded ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-black hover:text-white transition'}`}
+              className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
               aria-disabled={currentPage === 1}
             >
               Previous
             </Link>
-            <span className="text-sm">Page {currentPage} of {totalPages}</span>
+            <span className="text-sm text-white/90 glassmorphic px-4 py-2 rounded border border-white/20">Page {currentPage} of {totalPages}</span>
             <Link
               href={`/products?page=${currentPage + 1}${searchQuery ? `&search=${encodeURIComponent(getSearchParam(searchParams))}` : ''}${typeQuery ? `&type=${encodeURIComponent(typeQuery)}` : ''}`}
-              className={`px-4 py-2 border rounded ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-black hover:text-white transition'}`}
+              className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
               aria-disabled={currentPage === totalPages}
             >
               Next

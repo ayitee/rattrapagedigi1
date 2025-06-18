@@ -55,31 +55,31 @@ export default function CartPage() {
                 </thead>
                 <tbody>
                   {cart.map(item => (
-                    <tr key={item.id} className="border-b align-middle">
+                    <tr key={item.id} className="border-b align-middle glassmorphic">
                       <td className="py-4 flex items-center gap-4">
-                        <img src={item.photo} alt={item.name} className="w-16 h-16 object-cover rounded" />
-                        <span className="font-medium">{item.name}</span>
+                        <img src={item.photo} alt={item.name} className="w-16 h-16 object-cover rounded border border-white/20 bg-white/10" />
+                        <span className="font-medium text-white">{item.name}</span>
                       </td>
-                      <td className="py-4">${item.price.toFixed(2)}</td>
+                      <td className="py-4 text-white">${item.price.toFixed(2)}</td>
                       <td className="py-4">
                         <div className="flex items-center gap-2">
                           <button
-                            className="px-2 py-1 border rounded bg-white hover:bg-gray-100"
+                            className="px-2 py-1 border border-white/20 rounded bg-white/10 text-white hover:bg-white/20 transition"
                             onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
                             aria-label="Decrease quantity"
                           >-</button>
-                          <span className="px-2">{item.quantity}</span>
+                          <span className="px-2 text-white">{item.quantity}</span>
                           <button
-                            className="px-2 py-1 border rounded bg-white hover:bg-gray-100"
+                            className="px-2 py-1 border border-white/20 rounded bg-white/10 text-white hover:bg-white/20 transition"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             aria-label="Increase quantity"
                           >+</button>
                         </div>
                       </td>
-                      <td className="py-4">${(item.price * item.quantity).toFixed(2)}</td>
+                      <td className="py-4 text-white">${(item.price * item.quantity).toFixed(2)}</td>
                       <td className="py-4">
                         <button
-                          className="text-red-600 hover:underline"
+                          className="text-red-400 hover:underline"
                           onClick={() => removeFromCart(item.id)}
                           aria-label="Remove item"
                         >Remove</button>
@@ -99,7 +99,7 @@ export default function CartPage() {
                   <div className="text-xl font-bold">Total: ${total.toFixed(2)}</div>
                   <button
                     className="px-6 py-3 rounded-lg bg-white text-black font-bold shadow hover:bg-gray-100 transition border border-white/40"
-                    onClick={() => alert('Checkout coming soon!')}
+                    onClick={() => router.push('/checkout')}
                   >
                     Checkout
                   </button>

@@ -67,21 +67,31 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col">
+    <main className="min-h-screen bg-transparent text-white flex flex-col relative overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 -z-10">
+        <img
+          src="/background.jpeg"
+          alt="Background"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
       {/* Header */}
       <Header />
 
       <div className="max-w-5xl mx-auto w-full p-8">
-        <div className="flex flex-col md:flex-row gap-12">
+        <div className="flex flex-col md:flex-row gap-12 glassmorphic p-8 rounded-2xl shadow-lg border border-white/20">
           {/* Image on the left */}
           <div className="flex-shrink-0 flex justify-center items-center w-full md:w-1/2">
             <img src={product.photo} alt={product.name} className="w-full max-w-xs h-auto object-cover rounded" />
           </div>
           {/* Info on the right */}
           <div className="flex flex-col w-full md:w-1/2">
-            <h1 className="text-3xl font-bold mb-2 line-clamp-2">{product.name}</h1>
-            <div className="text-2xl font-semibold text-gray-800 mb-4">${product.price.toFixed(2)}</div>
-            <ul className="mb-6 list-disc list-inside space-y-1 text-gray-700">
+            <h1 className="text-3xl font-bold mb-2 line-clamp-2 text-white">{product.name}</h1>
+            <div className="text-2xl font-semibold text-white mb-4">${product.price.toFixed(2)}</div>
+            <ul className="mb-6 list-disc list-inside space-y-1 text-white/80">
               {details.map((d, i) => <li key={i}>{d}</li>)}
             </ul>
             {/* Switches selection (frontend only) */}
@@ -91,7 +101,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <QuantitySelector price={product.price} value={quantity} onChange={setQuantity} />
             </div>
             <button
-              className="px-6 py-3 bg-black text-white rounded font-semibold hover:bg-gray-800 transition mb-4"
+              className="px-6 py-3 bg-white/20 text-white rounded font-semibold hover:bg-white/30 transition mb-4"
               onClick={() => {
                 addToCart({ id: product.id, name: product.name, price: product.price, photo: product.photo }, quantity);
                 setShowAdded(product.name);
@@ -101,34 +111,36 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               Add to Cart
             </button>
             {showAdded && (
-              <div className="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded shadow text-center font-semibold animate-fade-in">
+              <div className="mb-4 px-4 py-2 bg-emerald-900/80 text-white rounded shadow text-center font-semibold animate-fade-in border border-white/20">
                 {showAdded} added to cart
               </div>
             )}
           </div>
         </div>
         {/* Description below */}
-        <div className="mt-10">
-          <h2 className="text-xl font-bold mb-2">Description</h2>
-          <p className="text-gray-600 text-base md:text-lg">{product.description}</p>
+        <div className="mt-10 glassmorphic p-6 rounded-2xl border border-white/20">
+          <h2 className="text-xl font-bold mb-2 text-white">Description</h2>
+          <p className="text-white/80 text-base md:text-lg">{product.description}</p>
         </div>
       </div>
       {/* Q&A Accordion with extra spacing */}
       <div className="max-w-5xl mx-auto w-full px-8 pb-12 mt-16">
-        <h2 className="text-2xl font-bold mb-4">Q&amp;A</h2>
-        <div className="space-y-4">
-          {qna.map((item, idx) => (
-            <details key={idx} className="border rounded">
-              <summary className="cursor-pointer px-4 py-3 font-medium select-none focus:outline-none focus:ring-2 focus:ring-black">
-                {item.question}
-              </summary>
-              <div className="px-4 py-3 text-gray-700 border-t bg-gray-50">{item.answer}</div>
-            </details>
-          ))}
+        <div className="glassmorphic p-6 rounded-2xl border border-white/20">
+          <h2 className="text-2xl font-bold mb-4 text-white">Q&amp;A</h2>
+          <div className="space-y-4">
+            {qna.map((item, idx) => (
+              <details key={idx} className="border rounded border-white/20">
+                <summary className="cursor-pointer px-4 py-3 font-medium select-none focus:outline-none focus:ring-2 focus:ring-white text-white/90">
+                  {item.question}
+                </summary>
+                <div className="px-4 py-3 text-white/80 border-t border-white/10 bg-white/5">{item.answer}</div>
+              </details>
+            ))}
+          </div>
         </div>
       </div>
       {/* Footer */}
-      <footer className="border-t border-gray-200 p-6 text-center text-xs text-gray-500">
+      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
         &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
       </footer>
     </main>
