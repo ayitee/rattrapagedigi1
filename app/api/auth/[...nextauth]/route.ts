@@ -23,6 +23,13 @@ const authOptions = {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            password: true,
+            role: true,
           }
         });
 
@@ -43,6 +50,7 @@ const authOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.name,
+          role: user.role,
         };
       }
     })
@@ -57,12 +65,18 @@ const authOptions = {
     async jwt({ token, user }: { token: any, user?: any }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
+      } else if (!token.role && token.email) {
+        // Fetch user from DB if role is missing (for session refresh)
+        const dbUser = await prisma.user.findUnique({ where: { email: token.email } });
+        if (dbUser) token.role = dbUser.role;
       }
       return token;
     },
     async session({ session, token }: { session: any, token: any }) {
       if (token && session.user) {
         (session.user as any).id = token.id as string;
+        (session.user as any).role = token.role;
       }
       return session;
     }

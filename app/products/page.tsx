@@ -76,7 +76,18 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
   if (currentPage > totalPages && totalPages !== 0) notFound();
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col">
+    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 -z-10">
+        <img
+          src="/background.jpeg"
+          alt="Background"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
+
       {/* Header */}
       <Header />
 
@@ -236,7 +247,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 p-6 text-center text-xs text-gray-500">
+      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
         &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
       </footer>
     </main>

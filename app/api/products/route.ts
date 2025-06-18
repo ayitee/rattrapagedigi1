@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import path from 'path';
+import { promises as fs } from 'fs';
 
 // GET /api/products
 export async function GET() {
   try {
-    const products = await prisma.product.findMany();
+    const filePath = path.join(process.cwd(), 'prisma/products.json');
+    const data = await fs.readFile(filePath, 'utf-8');
+    const products = JSON.parse(data);
     return NextResponse.json(products);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });

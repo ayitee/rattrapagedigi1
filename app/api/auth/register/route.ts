@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
         name: `${firstname} ${lastname}`,
         email,
         password: hashedPassword,
+        role: 'user',
       },
     });
 
