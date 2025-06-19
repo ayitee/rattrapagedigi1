@@ -32,10 +32,10 @@ export default function Header() {
       )}
       {(session?.user as any)?.role === "admin" || (session?.user as any)?.role === "superadmin" ? (
         menuOpen ? (
-          <button className={`font-semibold transition hover:text-green-400 block py-2 md:py-0 text-left w-full ${isDashboard ? "text-green-400 font-bold" : "text-green-400"}`} onClick={() => handleNav("/admin/products")}>Dashboard</button>
+          <button className={`font-semibold transition hover:text-green-400 block py-2 md:py-0 text-left w-full ${isDashboard ? "text-green-400 font-bold" : "text-green-400"}`} onClick={() => handleNav("/admin")}>Dashboard</button>
         ) : (
           <Link
-            href="/admin/products"
+            href="/admin"
             className={`font-semibold transition hover:text-green-400 block py-2 md:py-0 ${isDashboard ? "text-green-400 font-bold" : "text-green-400"}`}
           >
             Dashboard
@@ -60,7 +60,9 @@ export default function Header() {
 
   return (
     <>
-      <header className={`w-full flex items-center justify-between px-4 md:px-8 py-4 bg-black/30 backdrop-blur-md border-b border-white/20 z-30 relative transition-all duration-300 ${menuOpen ? 'opacity-0 pointer-events-none' : ''}`}>
+      <header
+        className={`fixed left-1/2 -translate-x-1/2 top-4 w-[95vw] max-w-5xl flex items-center justify-between px-4 md:px-8 py-3 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full shadow-xl z-50 transition-all duration-300 ${menuOpen ? 'opacity-0 pointer-events-none' : ''}`}
+      >
         <Link href="/" className="flex items-center z-40">
           <img src="/logo.png" alt="Vellux Logo" className="h-10 w-auto" />
         </Link>

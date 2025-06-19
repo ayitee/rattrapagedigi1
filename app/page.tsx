@@ -41,7 +41,7 @@ export default function HomePage() {
       {/* Gradient transition line between hero and Q&A */}
       <div className="w-full h-24 bg-gradient-to-b from-black to-transparent" />
       {/* Q&A section */}
-      <section className="relative flex flex-col items-center justify-center min-h-screen py-20 gradient-background text-white">
+      <section className="relative flex flex-col items-center justify-center min-h-screen py-20 text-white">
         <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black to-transparent pointer-events-none" />
         <div className="max-w-2xl w-full mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>

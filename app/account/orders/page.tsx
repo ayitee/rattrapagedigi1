@@ -65,7 +65,7 @@ export default function OrdersHistoryPage() {
             {filteredOrders.map(order => (
               <div key={order.id} className="glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <div className="font-bold text-lg">Order #{order.id}</div>
+                  <div className="font-bold text-lg text-green-400">Order #{order.id}</div>
                   <div className="text-white/70 text-sm">{new Date(order.creationDate).toLocaleString()}</div>
                 </div>
                 <ul className="mb-4">

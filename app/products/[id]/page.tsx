@@ -67,7 +67,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden gradient-background">
+    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden">
+      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img

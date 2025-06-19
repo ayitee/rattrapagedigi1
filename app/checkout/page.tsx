@@ -28,6 +28,7 @@ export default function CheckoutPage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-transparent text-white relative overflow-hidden">
+      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
       {/* Background image and overlay */}
       <div className="absolute inset-0 -z-10">
         <img

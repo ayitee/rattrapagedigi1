@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import Header from '../components/Header';
 
 export default function LoginPage() {
   const [loginError, setLoginError] = useState('');
@@ -54,69 +55,60 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col">
-      <header className="flex justify-between items-center p-6 border-b border-gray-200">
-        <h1 className="text-xl font-semibold tracking-wide">Vellux</h1>
-        <nav>
-          <ul className="flex space-x-6 text-sm font-medium">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/products">Products</Link></li>
-            <li><Link href="/cart">Cart</Link></li>
-            <li><Link href="/login">Login</Link></li>
-          </ul>
-        </nav>
-      </header>
-      <div className="flex flex-col items-center justify-center flex-grow bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-transparent text-white flex flex-col">
+      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
+      <Header />
+      <div className="flex flex-col items-center justify-center flex-grow py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Login */}
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
-            <p className="mb-6 text-gray-700">Please enter your email and password below to access your account</p>
+          <div className="flex flex-col justify-center glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-8">
+            <h2 className="text-2xl font-bold mb-4 text-white">Login</h2>
+            <p className="mb-6 text-white/70">Please enter your email and password below to access your account</p>
             <form className="space-y-4" onSubmit={handleLogin}>
               <div>
-                <label htmlFor="login-email" className="block font-medium mb-1">Email Address <span className="text-red-500">*</span></label>
-                <input id="login-email" name="email" type="email" required className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="login-email" className="block font-medium mb-1 text-white">Email Address <span className="text-red-400">*</span></label>
+                <input id="login-email" name="email" type="email" required className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label htmlFor="login-password" className="block font-medium mb-1">Password <span className="text-red-500">*</span></label>
-                <input id="login-password" name="password" type="password" required className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="login-password" className="block font-medium mb-1 text-white">Password <span className="text-red-400">*</span></label>
+                <input id="login-password" name="password" type="password" required className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
-              {loginError && <div className="text-red-600 text-sm font-medium">{loginError}</div>}
+              {loginError && <div className="text-red-400 text-sm font-medium">{loginError}</div>}
               <div className="flex items-center gap-4 mt-4">
-                <button type="submit" className="px-8 py-2 border border-black rounded bg-white text-black font-bold hover:bg-black hover:text-white transition">SIGN IN</button>
-                <Link href="#" className="text-sm text-black underline hover:text-gray-700">Lost your password?</Link>
+                <button type="submit" className="px-8 py-2 rounded bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold shadow border border-white/30 hover:from-blue-800 hover:to-blue-600 transition">SIGN IN</button>
+                <Link href="#" className="text-sm text-white underline hover:text-blue-300">Lost your password?</Link>
               </div>
             </form>
           </div>
           {/* Register */}
-          <div className="flex flex-col justify-center bg-gray-50 rounded-lg p-8 border border-gray-200">
-            <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Register</h2>
-            <p className="mb-6 text-gray-700 text-center md:text-left">Please register below to create an account</p>
+          <div className="flex flex-col justify-center glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-8">
+            <h2 className="text-2xl font-bold mb-4 text-center md:text-left text-white">Register</h2>
+            <p className="mb-6 text-white/70 text-center md:text-left">Please register below to create an account</p>
             <form className="space-y-4" onSubmit={handleRegister}>
               <div>
-                <label htmlFor="register-firstname" className="block font-medium mb-1">First Name</label>
-                <input id="register-firstname" name="firstname" type="text" className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="register-firstname" className="block font-medium mb-1 text-white">First Name</label>
+                <input id="register-firstname" name="firstname" type="text" className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label htmlFor="register-lastname" className="block font-medium mb-1">Last Name</label>
-                <input id="register-lastname" name="lastname" type="text" className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="register-lastname" className="block font-medium mb-1 text-white">Last Name</label>
+                <input id="register-lastname" name="lastname" type="text" className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label htmlFor="register-email" className="block font-medium mb-1">Your Email Address <span className="text-red-500">*</span></label>
-                <input id="register-email" name="email" type="email" required className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="register-email" className="block font-medium mb-1 text-white">Your Email Address <span className="text-red-400">*</span></label>
+                <input id="register-email" name="email" type="email" required className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label htmlFor="register-password" className="block font-medium mb-1">Your Password <span className="text-red-500">*</span></label>
-                <input id="register-password" name="password" type="password" required className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                <label htmlFor="register-password" className="block font-medium mb-1 text-white">Your Password <span className="text-red-400">*</span></label>
+                <input id="register-password" name="password" type="password" required className="w-full border border-white/30 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
-              {registerError && <div className="text-red-600 text-sm font-medium">{registerError}</div>}
-              {registerSuccess && <div className="text-green-600 text-sm font-medium">{registerSuccess}</div>}
-              <button type="submit" className="w-full px-8 py-2 border border-black rounded bg-black text-white font-bold hover:bg-gray-900 transition mt-4">CREATE AN ACCOUNT</button>
+              {registerError && <div className="text-red-400 text-sm font-medium">{registerError}</div>}
+              {registerSuccess && <div className="text-green-400 text-sm font-medium">{registerSuccess}</div>}
+              <button type="submit" className="w-full px-8 py-2 rounded bg-gradient-to-r from-green-700 to-green-500 text-white font-bold shadow border border-white/30 hover:from-green-800 hover:to-green-600 transition mt-4">CREATE AN ACCOUNT</button>
             </form>
           </div>
         </div>
       </div>
-      <footer className="border-t border-gray-200 p-6 text-center text-xs text-gray-500">
+      <footer className="border-t border-white/20 p-6 text-center text-xs text-white/60 bg-transparent">
         &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
       </footer>
     </main>

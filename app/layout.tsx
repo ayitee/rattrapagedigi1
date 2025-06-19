@@ -29,12 +29,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ConditionalBackground>
-          <Providers>
-            {children}
-          </Providers>
-        </ConditionalBackground>
+      <body className={`gradient-background ${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

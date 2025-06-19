@@ -122,7 +122,8 @@ export default function AccountPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden gradient-background">
+    <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
+      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
@@ -186,6 +187,13 @@ export default function AccountPage() {
               </div>
               {profileMsg && <div className="mt-2 text-green-400 font-semibold">{profileMsg}</div>}
             </form>
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="w-full py-2 mb-8 rounded bg-red-600 hover:bg-red-700 text-white font-bold shadow border border-white/30 transition text-lg"
+            >
+              Log out
+            </button>
             <h2 className="text-2xl font-bold mb-6 text-white">Order History</h2>
             {loading ? (
               <div>Loading orders...</div>
