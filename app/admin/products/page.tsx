@@ -1,250 +1,303 @@
 "use client";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import GradientBody from "../../components/GradientBody";
 import Header from "../../components/Header";
-import Link from "next/link";
 
-// Extend session.user type to include 'role', 'name', and 'email'
-type UserWithRole = { role?: string; name?: string | null; email?: string | null };
+interface User {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string;
+}
+
+interface CustomSession {
+  user?: User;
+  expires: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  photo: string;
+}
 
 export default function AdminProductsPage() {
-  const { data: session, status } = useSession();
-
-  // Extend session.user type to include 'role', 'name', and 'email'
-  const user = session?.user as UserWithRole | undefined;
-
-  const [products, setProducts] = useState<any[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const { data: session, status } = useSession() as { data: CustomSession | null; status: string };
+  const router = useRouter();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
-  const selectedProduct = products.find((p) => p.id === selectedProductId) || products[0];
-  const [editForm, setEditForm] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Product>>({});
   const [isAdding, setIsAdding] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
-
-  const PRODUCTS_PER_PAGE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
-  const paginatedProducts = products.slice((currentPage - 1) * PRODUCTS_PER_PAGE, currentPage * PRODUCTS_PER_PAGE);
+  const [feedback, setFeedback] = useState<string>("");
 
   useEffect(() => {
-    if (user && (user.role === "admin" || user.role === "superadmin")) {
-      setLoadingProducts(true);
-      fetch("/api/products")
-        .then(res => res.json())
-        .then(data => {
-          setProducts(data);
-          setLoadingProducts(false);
-        })
-        .catch(() => {
-          setError("Failed to load products");
-          setLoadingProducts(false);
-        });
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    } else if (session?.user?.role !== "ADMIN") {
+      router.replace("/");
+    } else {
+      fetchProducts();
     }
-  }, [user]);
+  }, [status, session, router]);
 
-  useEffect(() => {
-    if (selectedProduct && !isAdding) {
-      setEditForm({ ...selectedProduct });
-    } else if (isAdding) {
-      setEditForm({
-        name: '',
-        price: '',
-        description: '',
-        photo: '',
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("/api/products");
+      if (!response.ok) throw new Error("Failed to fetch products");
+      const data = await response.json();
+      setProducts(data.map((p: any) => ({ ...p, id: Number(p.id) })));
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load products");
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const method = isAdding ? "POST" : "PUT";
+      const url = isAdding ? "/api/products" : `/api/products/${selectedProduct?.id}`;
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editForm),
       });
-    }
-  }, [selectedProductId, loadingProducts, isAdding]);
 
-  if (status === "loading") return <div>Loading...</div>;
-  if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
-    return <div className="p-8 text-center text-red-600 font-bold">Access Denied</div>;
+      if (!response.ok) throw new Error("Failed to save product");
+
+      const savedProduct = await response.json();
+      if (isAdding) {
+        setProducts([...products, savedProduct]);
+      } else {
+        setProducts(products.map(p => p.id === savedProduct.id ? savedProduct : p));
+      }
+
+      setFeedback(isAdding ? "Product created successfully!" : "Product updated successfully!");
+      setIsAdding(false);
+      setSelectedProduct(null);
+      setEditForm({});
+      setTimeout(() => setFeedback(""), 3000);
+    } catch (err) {
+      setFeedback("Error saving product. Please try again.");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to delete product");
+
+      setProducts(products.filter(p => p.id !== id));
+      setSelectedProduct(null);
+      setEditForm({});
+      setFeedback("Product deleted successfully!");
+      setTimeout(() => setFeedback(""), 3000);
+    } catch (err) {
+      setFeedback("Error deleting product. Please try again.");
+    }
+  };
+
+  if (status === "loading" || loading) {
+    return (
+      <GradientBody>
+        <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
+          <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
+          <Header />
+          <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="backdrop-blur-sm bg-white/10 rounded-xl p-8 border border-white/20 text-center">
+                <p className="text-xl text-gray-200">Loading...</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      </GradientBody>
+    );
+  }
+
+  if (!session || session.user?.role !== "ADMIN") {
+    return null;
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-transparent text-white relative overflow-hidden">
-      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="/background.jpeg"
-          alt="Background"
-          className="w-full h-full object-cover object-center"
-        />
-        {/* Overlay for contrast */}
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
-      <Header />
-      <div className="flex flex-col md:flex-row flex-1 w-full max-w-7xl mx-auto gap-8 p-4 md:p-8 flex-grow">
-        {/* Left: Product Edit Form */}
-        <section className="w-full md:max-w-md glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-4 md:p-6 flex flex-col mb-8 md:mb-0">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">{isAdding ? 'Add Product' : 'Edit Product'}</h2>
-            <button
-              type="button"
-              className="px-4 py-2 rounded bg-green-700 text-white font-bold border border-green-700 shadow hover:bg-green-800 transition text-base focus:outline-none focus:ring-2 focus:ring-green-400"
-              onClick={() => {
-                setIsAdding(true);
-                setSelectedProductId(null);
-              }}
-            >
-              + New Product
-            </button>
-          </div>
-          {editForm ? (
-            <form className="flex flex-col gap-6">
-              <label className="font-semibold text-white">Name
-                <input
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  value={editForm.name || ''}
-                  onChange={e => setEditForm({ ...editForm, name: e.target.value })}
-                />
-              </label>
-              <label className="font-semibold text-white">Price
-                <input
-                  type="number"
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  value={editForm.price || ''}
-                  onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
-                />
-              </label>
-              <label className="font-semibold text-white">Description
-                <textarea
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 min-h-[80px] bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  value={editForm.description || ''}
-                  onChange={e => setEditForm({ ...editForm, description: e.target.value })}
-                />
-              </label>
-              <label className="font-semibold text-white">Image URL
-                <input
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  value={editForm.photo || editForm.image || ''}
-                  onChange={e => setEditForm({ ...editForm, photo: e.target.value })}
-                />
-              </label>
-              <div className="flex gap-2 mt-4 flex-wrap">
-                {isAdding ? (
-                  <button
-                    type="button"
-                    className="px-4 py-2 rounded bg-green-700 text-white font-semibold hover:bg-green-800 transition focus:outline-none focus:ring-2 focus:ring-green-400"
-                    onClick={() => {
-                      const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                      const newProduct = { ...editForm, id: newId };
-                      setProducts([newProduct, ...products]);
-                      setIsAdding(false);
-                      setSelectedProductId(newId);
-                      setFeedback('Product created!');
-                      setTimeout(() => setFeedback(null), 2000);
-                    }}
-                  >
-                    Create
-                  </button>
-                ) : (
-                  <button type="button" className="px-4 py-2 rounded bg-blue-700 text-white font-semibold hover:bg-blue-800 transition focus:outline-none focus:ring-2 focus:ring-blue-400" onClick={() => { setFeedback('Product saved!'); setTimeout(() => setFeedback(null), 2000); }}>Save (demo)</button>
-                )}
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded bg-white/10 text-white font-semibold hover:bg-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  onClick={() => {
-                    if (isAdding) {
-                      setIsAdding(false);
-                      setEditForm(selectedProduct ? { ...selectedProduct } : null);
-                    } else {
-                      setEditForm({ ...selectedProduct });
-                    }
-                    setFeedback('Form reset.');
-                    setTimeout(() => setFeedback(null), 2000);
-                  }}
-                >
-                  Reset
-                </button>
-                {!isAdding && (
-                  <button
-                    type="button"
-                    className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition ml-auto focus:outline-none focus:ring-2 focus:ring-red-400"
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this product?')) {
-                        setProducts(products.filter(p => p.id !== selectedProduct.id));
-                        setSelectedProductId(null);
-                        setFeedback('Product deleted!');
-                        setTimeout(() => setFeedback(null), 2000);
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-              {feedback && <div className="mt-4 text-center text-green-400 font-semibold animate-pulse">{feedback}</div>}
-            </form>
-          ) : (
-            <div className="text-white/70">Select a product to edit.</div>
-          )}
-        </section>
-        {/* Right: Product List */}
-        <section className="flex-1 glassmorphic bg-white/10 rounded-2xl shadow-lg p-4 md:p-6 overflow-x-auto border-t md:border-t-0 md:border-l border-white/20">
-          <h2 className="text-3xl font-extrabold mb-8 text-white tracking-tight">Products</h2>
-          {loadingProducts ? (
-            <div>Loading products...</div>
-          ) : error ? (
-            <div className="text-red-400 font-bold">{error}</div>
-          ) : (
-            <>
-            <table className="w-full rounded-xl overflow-x-auto border border-white/20 shadow-md bg-white/10 text-white text-base md:text-lg">
-                <thead>
-                  <tr className="bg-white/10">
-                    <th className="py-3 px-4 text-left">ID</th>
-                    <th className="py-3 px-4 text-left">Image</th>
-                    <th className="py-3 px-4 text-left">Name</th>
-                    <th className="py-3 px-4 text-left">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                 {paginatedProducts.map((product, idx) => (
-                    <tr
-                      key={product.id}
-                      className={`border-t border-white/10 transition-colors cursor-pointer ${selectedProductId === product.id ? 'bg-white/20' : idx % 2 === 0 ? 'bg-transparent' : 'bg-white/10'} hover:bg-blue-900/20`}
-                      onClick={() => setSelectedProductId(product.id)}
-                    >
-                      <td className="py-2 px-4 font-mono text-xs text-white/70">{product.id}</td>
-                      <td className="py-2 px-4">
-                        <img src={product.photo || product.image} alt={product.name} className="w-12 h-12 object-cover rounded shadow border border-white/20" />
-                      </td>
-                      <td className="py-2 px-4 font-semibold">
-                        <Link href={`/products/${product.id}`} className="text-blue-300 underline hover:text-blue-100" target="_blank" rel="noopener noreferrer">
-                          {product.name}
-                        </Link>
-                      </td>
-                      <td className="py-2 px-4 font-semibold">${product.price.toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            {/* Pagination Controls */}
-            <div className="flex justify-center items-center gap-4 mt-6">
-              <button
-                className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <span className="text-sm text-white/90 glassmorphic px-4 py-2 rounded border border-white/20">Page {currentPage} of {totalPages}</span>
-              <button
-                className={`px-4 py-2 border border-white rounded bg-white/10 text-white ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'hover:bg-white/20 hover:text-white transition'}`}
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
+    <GradientBody>
+      <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
+        <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
+        <Header />
+        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Hero Section */}
+            <div className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Product Management
+              </h1>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto">
+                Add, edit, or remove products from your store
+              </p>
             </div>
-            </>
-          )}
-        </section>
-      </div>
-      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
-        &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
-      </footer>
-    </main>
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Product Form */}
+              <div className="lg:col-span-1">
+                <div className="backdrop-blur-sm bg-white/10 rounded-xl p-8 border border-white/20">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-white">
+                      {isAdding ? "Add Product" : "Edit Product"}
+                    </h2>
+                    <button
+                      onClick={() => {
+                        setIsAdding(true);
+                        setSelectedProduct(null);
+                        setEditForm({});
+                      }}
+                      className="px-4 py-2 bg-green-600/20 text-green-300 rounded-lg hover:bg-green-600/30 transition-colors duration-200 font-semibold"
+                    >
+                      + New
+                    </button>
+                  </div>
+
+                  <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.name || ""}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter product name"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        value={editForm.price || ""}
+                        onChange={(e) => setEditForm({ ...editForm, price: Number(e.target.value) })}
+                        className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter price"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        value={editForm.description || ""}
+                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                        placeholder="Enter product description"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Photo URL
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.photo || ""}
+                        onChange={(e) => setEditForm({ ...editForm, photo: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter photo URL"
+                        required
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <button
+                        type="submit"
+                        className="flex-1 px-6 py-3 bg-blue-600/20 text-blue-300 rounded-lg hover:bg-blue-600/30 transition-colors duration-200 font-semibold"
+                      >
+                        {isAdding ? "Create" : "Save"}
+                      </button>
+                      {!isAdding && selectedProduct && (
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(selectedProduct.id)}
+                          className="px-6 py-3 bg-red-600/20 text-red-300 rounded-lg hover:bg-red-600/30 transition-colors duration-200 font-semibold"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  </form>
+
+                  {feedback && (
+                    <div className={`mt-4 p-4 rounded-lg text-center ${feedback.includes("Error") ? "bg-red-500/20 text-red-300" : "bg-green-500/20 text-green-300"}`}>
+                      {feedback}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Products List */}
+              <div className="lg:col-span-2">
+                <div className="backdrop-blur-sm bg-white/10 rounded-xl border border-white/20 overflow-hidden">
+                  {error ? (
+                    <div className="p-8 text-center text-red-300">{error}</div>
+                  ) : (
+                    <div className="divide-y divide-white/10">
+                      {products.map((product) => (
+                        <div
+                          key={product.id}
+                          className={`p-6 flex items-center gap-6 cursor-pointer transition-colors ${
+                            selectedProduct?.id === product.id
+                              ? "bg-white/20"
+                              : "hover:bg-white/10"
+                          }`}
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            setEditForm(product);
+                            setIsAdding(false);
+                          }}
+                        >
+                          <img
+                            src={product.photo}
+                            alt={product.name}
+                            className="w-20 h-20 object-cover rounded-lg border border-white/20"
+                          />
+                          <div className="flex-grow">
+                            <h3 className="text-lg font-semibold text-white">
+                              {product.name}
+                            </h3>
+                            <p className="text-gray-300 line-clamp-1">
+                              {product.description}
+                            </p>
+                          </div>
+                          <div className="text-xl font-bold text-white">
+                            ${product.price}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </GradientBody>
   );
 } 

@@ -1,118 +1,142 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useCart } from "../context/CartContext";
-import Link from "next/link";
-import Header from "../components/Header";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import GradientBody from '../components/GradientBody';
+import Header from '../components/Header';
+import { useCart } from '../context/CartContext';
 
 export default function CartPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/login");
-    }
-  }, [status, router]);
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch('/api/checkout_sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: cart }),
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const data = await response.json();
+      router.push(data.url);
+    } catch (error) {
+      console.error('Error during checkout:', error);
+    }
+  };
+
   return (
-    <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
-      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="/background.jpeg"
-          alt="Background"
-          className="w-full h-full object-cover object-center"
-        />
-        {/* Overlay for contrast */}
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
-      <Header />
-      <section className="flex flex-col items-center w-full max-w-[80vw] mx-auto px-4 py-8 flex-grow">
-        <h1 className="text-3xl font-bold mb-8 mt-8 text-white">Your Cart</h1>
-        {cart.length === 0 ? (
-          <div className="text-lg text-gray-600 mb-12">Your cart is empty. <Link href="/products" className="text-black underline">Shop now</Link></div>
-        ) : (
-          <div className="w-full max-w-3xl mx-auto backdrop-blur-lg bg-neutral-800/60 border border-white/20 rounded-2xl shadow-lg px-8 pt-10 pb-16 flex flex-col text-white">
-            <div className="flex-grow">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b">
-                    <th className="py-2">Product</th>
-                    <th className="py-2">Price</th>
-                    <th className="py-2">Quantity</th>
-                    <th className="py-2">Subtotal</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cart.map(item => (
-                    <tr key={item.id} className="border-b align-middle glassmorphic">
-                      <td className="py-4 flex items-center gap-4">
-                        <img src={item.photo} alt={item.name} className="w-16 h-16 object-cover rounded border border-white/20 bg-white/10" />
-                        <span className="font-medium text-white">{item.name}</span>
-                      </td>
-                      <td className="py-4 text-white">${item.price.toFixed(2)}</td>
-                      <td className="py-4">
-                        <div className="flex items-center gap-2">
-                          <button
-                            className="px-2 py-1 border border-white/20 rounded bg-white/10 text-white hover:bg-white/20 transition"
-                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                            aria-label="Decrease quantity"
-                          >-</button>
-                          <span className="px-2 text-white">{item.quantity}</span>
-                          <button
-                            className="px-2 py-1 border border-white/20 rounded bg-white/10 text-white hover:bg-white/20 transition"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            aria-label="Increase quantity"
-                          >+</button>
-                        </div>
-                      </td>
-                      <td className="py-4 text-white">${(item.price * item.quantity).toFixed(2)}</td>
-                      <td className="py-4">
-                        <button
-                          className="text-red-400 hover:underline"
-                          onClick={() => removeFromCart(item.id)}
-                          aria-label="Remove item"
-                        >Remove</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="flex justify-between items-center mt-8 gap-4">
-                <button
-                  className="px-4 py-2 rounded-lg border border-white/30 bg-white/20 backdrop-blur-md text-white font-semibold hover:bg-white/40 transition shadow"
-                  onClick={clearCart}
-                >
-                  Clear Cart
-                </button>
-                <div className="flex items-center gap-4">
-                  <div className="text-xl font-bold">Total: ${total.toFixed(2)}</div>
+    <GradientBody>
+      <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
+        <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
+        <Header />
+        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Hero Section */}
+            <div className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Shopping Cart
+              </h1>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto">
+                Review and manage your selected items
+              </p>
+            </div>
+
+            {/* Cart Content */}
+            <div className="space-y-8">
+              {cart.length === 0 ? (
+                <div className="backdrop-blur-sm bg-white/10 rounded-xl p-8 border border-white/20 text-center">
+                  <p className="text-xl text-gray-200 mb-6">Your cart is empty</p>
                   <button
-                    className="px-6 py-3 rounded-lg bg-white text-black font-bold shadow hover:bg-gray-100 transition border border-white/40"
-                    onClick={() => router.push('/checkout')}
+                    onClick={() => router.push('/products')}
+                    className="px-6 py-3 bg-blue-600/20 text-blue-300 rounded-lg hover:bg-blue-600/30 transition-colors duration-200 font-semibold"
                   >
-                    Checkout
+                    Browse Products
                   </button>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Cart Items */}
+                  <div className="backdrop-blur-sm bg-white/10 rounded-xl border border-white/20 overflow-hidden">
+                    {cart.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-6 flex flex-col md:flex-row items-start md:items-center gap-4 border-b border-white/10 last:border-b-0"
+                      >
+                        <div className="flex-shrink-0">
+                          <img
+                            src={item.photo}
+                            alt={item.name}
+                            className="w-24 h-24 object-cover rounded-lg border border-white/20"
+                          />
+                        </div>
+                        <div className="flex-grow">
+                          <h3 className="text-lg font-semibold text-white mb-4">{item.name}</h3>
+                          <div className="flex flex-wrap items-center gap-4">
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                              >
+                                -
+                              </button>
+                              <span className="text-white font-medium w-8 text-center">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                              >
+                                +
+                              </button>
+                            </div>
+                            <button
+                              onClick={() => removeFromCart(item.id)}
+                              className="text-red-400 hover:text-red-300 transition-colors"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                        <div className="text-xl font-bold text-white">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Cart Summary */}
+                  <div className="backdrop-blur-sm bg-white/10 rounded-xl p-8 border border-white/20">
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="text-xl text-gray-200">Total</span>
+                      <span className="text-3xl font-bold text-white">${total.toFixed(2)}</span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <button
+                        onClick={clearCart}
+                        className="px-6 py-3 bg-red-600/20 text-red-300 rounded-lg hover:bg-red-600/30 transition-colors duration-200 font-semibold flex-1 sm:flex-none"
+                      >
+                        Clear Cart
+                      </button>
+                      <button
+                        onClick={handleCheckout}
+                        className="px-6 py-3 bg-green-600/20 text-green-300 rounded-lg hover:bg-green-600/30 transition-colors duration-200 font-semibold flex-1"
+                      >
+                        Proceed to Checkout
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        )}
-      </section>
-      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
-        &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
-      </footer>
-    </main>
+        </div>
+      </main>
+    </GradientBody>
   );
 }

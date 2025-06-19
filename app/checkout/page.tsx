@@ -67,9 +67,7 @@ export default function CheckoutPage() {
           </div>
         )}
       </section>
-      <footer className="border-t border-white/20 p-6 text-center text-xs text-white bg-neutral-800/60 backdrop-blur-md w-full mt-auto shadow-[0_-4px_16px_0_rgba(255,255,255,0.08)]">
-        &copy; {new Date().getFullYear()} Rattrapage Digi. All rights reserved.
-      </footer>
+
     </main>
   );
 } 
