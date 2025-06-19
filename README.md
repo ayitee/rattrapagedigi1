@@ -1,22 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ATK Gaming - E-commerce Website
 
-## Getting Started
+A modern e-commerce platform for gaming peripherals built with Next.js 13, featuring a glassmorphic design and seamless user experience.
 
-First, run the development server:
+## Prerequisites
 
+- Node.js 18+ 
+- npm or yarn
+
+## Installation
+
+1. Clone the repository
+```bash
+git clone [repository-url]
+cd rattrapagedigi1
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables
+Create a `.env` file in the root directory with:
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+DATABASE_URL=your-database-url
+STRIPE_SECRET_KEY=your-stripe-secret
+STRIPE_WEBHOOK_SECRET=your-webhook-secret
+```
+
+## Running the Project
+
+1. Start the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
+
+- 🛍️ Full e-commerce functionality
+- 🔐 User authentication
+- 🛒 Shopping cart system
+- 💳 Secure payment integration
+- 📱 Responsive design
+- 🎨 Modern glassmorphic UI
+- 👤 User account management
+- 📦 Order tracking
+- 🔍 Product search and filtering
+
+## Tech Stack
+
+- Next.js 13
+- TypeScript
+- Tailwind CSS
+- Prisma
+- NextAuth.js
+- Stripe Integration
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
