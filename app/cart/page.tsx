@@ -24,7 +24,7 @@ export default function CartPage() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
+    <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden gradient-background">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img

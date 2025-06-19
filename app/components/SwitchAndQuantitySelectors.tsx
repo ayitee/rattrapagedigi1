@@ -47,15 +47,17 @@ export function QuantitySelector({
   };
 
   return (
-    <div className="mb-8 p-4 glassmorphic rounded-2xl border border-white/20 shadow-lg w-full max-w-xs">
+    <div className="mb-4 p-4 glassmorphic rounded-2xl border border-white/20 shadow-lg w-full">
       <div className="font-semibold mb-3 text-white">Quantity</div>
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => setQuantity(Math.max(1, qty - 1))}
           className="w-10 h-10 flex items-center justify-center border border-white/20 rounded-full text-2xl font-bold bg-white/10 text-white hover:bg-white/20 transition"
         >-</button>
-        <span className="w-12 h-10 flex items-center justify-center border border-white/20 rounded bg-white/10 text-lg font-medium text-white">
+        <span
+          className={`px-5 py-2 rounded-full font-medium text-base border transition shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30 bg-white/20 text-white border-white shadow-md flex justify-center`}
+        >
           {qty}
         </span>
         <button
@@ -64,7 +66,31 @@ export function QuantitySelector({
           className="w-10 h-10 flex items-center justify-center border border-white/20 rounded-full text-2xl font-bold bg-white/10 text-white hover:bg-white/20 transition"
         >+</button>
       </div>
-      <div className="text-base font-semibold text-white">Subtotal: <span className="text-lg">${(qty * price).toFixed(2)}</span></div>
+    </div>
+  );
+}
+
+export function QuantitySelectorSubtotal({
+  price,
+  value,
+}: {
+  price: number;
+  value?: number;
+}) {
+  const [qty, setQty] = useState(value ?? 1);
+
+  // Sync with parent if controlled
+  useEffect(() => {
+    if (value !== undefined) setQty(value);
+  }, [value]);
+
+  const setQuantity = (newQty: number) => {
+    setQty(newQty);
+  };
+
+  return (
+    <div className="mb-8 text-3xl font-extrabold text-white text-center tracking-tight">
+      Subtotal: <span>${(qty * price).toFixed(2)}</span>
     </div>
   );
 } 

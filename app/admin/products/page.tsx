@@ -20,6 +20,7 @@ export default function AdminProductsPage() {
   const selectedProduct = products.find((p) => p.id === selectedProductId) || products[0];
   const [editForm, setEditForm] = useState<any>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const PRODUCTS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,14 +74,14 @@ export default function AdminProductsPage() {
         <div className="absolute inset-0 bg-black/30" />
       </div>
       <Header />
-      <div className="flex flex-1 w-full max-w-7xl mx-auto gap-8 p-8 flex-grow">
+      <div className="flex flex-col md:flex-row flex-1 w-full max-w-7xl mx-auto gap-8 p-4 md:p-8 flex-grow">
         {/* Left: Product Edit Form */}
-        <section className="w-full max-w-md glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">{isAdding ? 'Add Product' : 'Edit Product'}</h2>
+        <section className="w-full md:max-w-md glassmorphic bg-white/10 border border-white/20 rounded-2xl shadow-lg p-4 md:p-6 flex flex-col mb-8 md:mb-0">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-extrabold text-white tracking-tight">{isAdding ? 'Add Product' : 'Edit Product'}</h2>
             <button
               type="button"
-              className="px-4 py-2 rounded bg-green-700 text-white font-bold border border-green-700 shadow hover:bg-green-800 transition text-base"
+              className="px-4 py-2 rounded bg-green-700 text-white font-bold border border-green-700 shadow hover:bg-green-800 transition text-base focus:outline-none focus:ring-2 focus:ring-green-400"
               onClick={() => {
                 setIsAdding(true);
                 setSelectedProductId(null);
@@ -90,10 +91,10 @@ export default function AdminProductsPage() {
             </button>
           </div>
           {editForm ? (
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-6">
               <label className="font-semibold text-white">Name
                 <input
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={editForm.name || ''}
                   onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                 />
@@ -101,46 +102,48 @@ export default function AdminProductsPage() {
               <label className="font-semibold text-white">Price
                 <input
                   type="number"
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={editForm.price || ''}
                   onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
                 />
               </label>
               <label className="font-semibold text-white">Description
                 <textarea
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 min-h-[80px] bg-white/10 text-white placeholder:text-gray-300"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 min-h-[80px] bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={editForm.description || ''}
                   onChange={e => setEditForm({ ...editForm, description: e.target.value })}
                 />
               </label>
               <label className="font-semibold text-white">Image URL
                 <input
-                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300"
+                  className="mt-1 w-full border border-white/20 rounded px-3 py-2 bg-white/10 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={editForm.photo || editForm.image || ''}
                   onChange={e => setEditForm({ ...editForm, photo: e.target.value })}
                 />
               </label>
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-4 flex-wrap">
                 {isAdding ? (
                   <button
                     type="button"
-                    className="px-4 py-2 rounded bg-green-700 text-white font-semibold hover:bg-green-800 transition"
+                    className="px-4 py-2 rounded bg-green-700 text-white font-semibold hover:bg-green-800 transition focus:outline-none focus:ring-2 focus:ring-green-400"
                     onClick={() => {
                       const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
                       const newProduct = { ...editForm, id: newId };
                       setProducts([newProduct, ...products]);
                       setIsAdding(false);
                       setSelectedProductId(newId);
+                      setFeedback('Product created!');
+                      setTimeout(() => setFeedback(null), 2000);
                     }}
                   >
                     Create
                   </button>
                 ) : (
-                  <button type="button" className="px-4 py-2 rounded bg-blue-700 text-white font-semibold hover:bg-blue-800 transition">Save (demo)</button>
+                  <button type="button" className="px-4 py-2 rounded bg-blue-700 text-white font-semibold hover:bg-blue-800 transition focus:outline-none focus:ring-2 focus:ring-blue-400" onClick={() => { setFeedback('Product saved!'); setTimeout(() => setFeedback(null), 2000); }}>Save (demo)</button>
                 )}
                 <button
                   type="button"
-                  className="px-4 py-2 rounded bg-white/10 text-white font-semibold hover:bg-white/20 transition"
+                  className="px-4 py-2 rounded bg-white/10 text-white font-semibold hover:bg-white/20 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onClick={() => {
                     if (isAdding) {
                       setIsAdding(false);
@@ -148,6 +151,8 @@ export default function AdminProductsPage() {
                     } else {
                       setEditForm({ ...selectedProduct });
                     }
+                    setFeedback('Form reset.');
+                    setTimeout(() => setFeedback(null), 2000);
                   }}
                 >
                   Reset
@@ -155,11 +160,13 @@ export default function AdminProductsPage() {
                 {!isAdding && (
                   <button
                     type="button"
-                    className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition ml-auto"
+                    className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition ml-auto focus:outline-none focus:ring-2 focus:ring-red-400"
                     onClick={() => {
                       if (window.confirm('Are you sure you want to delete this product?')) {
                         setProducts(products.filter(p => p.id !== selectedProduct.id));
                         setSelectedProductId(null);
+                        setFeedback('Product deleted!');
+                        setTimeout(() => setFeedback(null), 2000);
                       }
                     }}
                   >
@@ -167,21 +174,22 @@ export default function AdminProductsPage() {
                   </button>
                 )}
               </div>
+              {feedback && <div className="mt-4 text-center text-green-400 font-semibold animate-pulse">{feedback}</div>}
             </form>
           ) : (
             <div className="text-white/70">Select a product to edit.</div>
           )}
         </section>
         {/* Right: Product List */}
-        <section className="flex-1 glassmorphic bg-white/10 rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6 text-white">Products</h2>
+        <section className="flex-1 glassmorphic bg-white/10 rounded-2xl shadow-lg p-4 md:p-6 overflow-x-auto border-t md:border-t-0 md:border-l border-white/20">
+          <h2 className="text-3xl font-extrabold mb-8 text-white tracking-tight">Products</h2>
           {loadingProducts ? (
             <div>Loading products...</div>
           ) : error ? (
             <div className="text-red-400 font-bold">{error}</div>
           ) : (
             <>
-            <table className="w-full rounded-xl overflow-hidden border border-white/20 shadow-md bg-white/10 text-white">
+            <table className="w-full rounded-xl overflow-x-auto border border-white/20 shadow-md bg-white/10 text-white text-base md:text-lg">
                 <thead>
                   <tr className="bg-white/10">
                     <th className="py-3 px-4 text-left">ID</th>
@@ -194,7 +202,7 @@ export default function AdminProductsPage() {
                  {paginatedProducts.map((product, idx) => (
                     <tr
                       key={product.id}
-                      className={`border-t border-white/10 transition-colors cursor-pointer ${selectedProductId === product.id ? 'bg-white/20' : idx % 2 === 0 ? 'bg-transparent' : 'bg-white/10'} hover:bg-white/10`}
+                      className={`border-t border-white/10 transition-colors cursor-pointer ${selectedProductId === product.id ? 'bg-white/20' : idx % 2 === 0 ? 'bg-transparent' : 'bg-white/10'} hover:bg-blue-900/20`}
                       onClick={() => setSelectedProductId(product.id)}
                     >
                       <td className="py-2 px-4 font-mono text-xs text-white/70">{product.id}</td>

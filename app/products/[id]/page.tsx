@@ -67,7 +67,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <main className="min-h-screen bg-transparent text-white flex flex-col relative overflow-hidden">
+    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden gradient-background">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
@@ -91,9 +91,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           <div className="flex flex-col w-full md:w-1/2">
             <h1 className="text-3xl font-bold mb-2 line-clamp-2 text-white">{product.name}</h1>
             <div className="text-2xl font-semibold text-white mb-4">${product.price.toFixed(2)}</div>
-            <ul className="mb-6 list-disc list-inside space-y-1 text-white/80">
-              {details.map((d, i) => <li key={i}>{d}</li>)}
-            </ul>
             {/* Switches selection (frontend only) */}
             {product.type === 'keyboard' && <SwitchSelector switches={switches} />}
             {/* Quantity selector (frontend only) */}
@@ -129,9 +126,16 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           <h2 className="text-2xl font-bold mb-4 text-white">Q&amp;A</h2>
           <div className="space-y-4">
             {qna.map((item, idx) => (
-              <details key={idx} className="border rounded border-white/20">
-                <summary className="cursor-pointer px-4 py-3 font-medium select-none focus:outline-none focus:ring-2 focus:ring-white text-white/90">
-                  {item.question}
+              <details key={idx} className="border rounded border-white/20 group">
+                <summary className="cursor-pointer px-4 py-3 font-medium select-none focus:outline-none focus:ring-2 focus:ring-white text-white/90 flex items-center justify-between gap-2 group-open:bg-white/10 group-open:font-bold">
+                  <span>{item.question}</span>
+                  <span className="ml-2 flex items-center">
+                    <img
+                      src="/icons/chevron-down.png"
+                      alt="Show answer"
+                      className="w-5 h-5 transition-transform duration-300 group-open:rotate-180"
+                    />
+                  </span>
                 </summary>
                 <div className="px-4 py-3 text-white/80 border-t border-white/10 bg-white/5">{item.answer}</div>
               </details>

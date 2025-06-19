@@ -7,9 +7,17 @@ import Header from '../components/Header';
 const PRODUCTS_PER_PAGE = 8;
 
 async function getProducts() {
-  const filePath = path.join(process.cwd(), 'prisma/products.json');
-  const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
+  try {
+    const filePath = path.join(process.cwd(), 'prisma/products.json');
+    console.log('Reading products from:', filePath);
+    const data = await fs.readFile(filePath, 'utf-8');
+    const products = JSON.parse(data);
+    console.log('Loaded products:', products.length);
+    return products;
+  } catch (err) {
+    console.error('Error loading products.json:', err);
+    return [];
+  }
 }
 
 function getPageParam(searchParams: { [key: string]: string | string[] | undefined }) {
@@ -76,7 +84,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
   if (currentPage > totalPages && totalPages !== 0) notFound();
 
   return (
-    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden">
+    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden gradient-background">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
@@ -92,113 +100,122 @@ export default async function ProductsPage({ searchParams }: { searchParams: { [
       <Header />
 
       {/* Products Grid Section */}
-      <section className="flex-grow px-2 py-12 max-w-[90vw] mx-auto w-full flex flex-col md:flex-row gap-8">
-        {/* Sidebar for sorting/filtering */}
-        <aside className="mb-8 md:mb-0 md:w-72 flex-shrink-0">
-          <div className="sticky top-24 glassmorphic p-6 rounded-2xl shadow-lg border border-white/20">
-            <h3 className="text-lg font-bold mb-4 text-white">Product Type</h3>
-            <ul className="space-y-2 mb-8">
-              <li>
-                {(() => {
-                  // Only keep string values in allQuery
-                  const allQuery: Record<string, string> = {};
-                  Object.entries(searchParams).forEach(([key, value]) => {
-                    if (typeof value === 'string') allQuery[key] = value;
-                  });
-                  allQuery.page = '1';
-                  return (
-                    <Link
-                      href={{ pathname: '/products', query: allQuery }}
-                      className={`block px-4 py-2 rounded transition font-medium ${!typeQuery ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
-                    >
-                      All
-                    </Link>
-                  );
-                })()}
-              </li>
-              {types.map((type: any) => {
-                // Only keep string values in typeQueryObj
-                const typeQueryObj: Record<string, string> = {};
-                Object.entries(searchParams).forEach(([key, value]) => {
-                  if (typeof value === 'string') typeQueryObj[key] = value;
-                });
-                typeQueryObj.type = type;
-                typeQueryObj.page = '1';
-                return (
-                  <li key={type}>
-                    <Link
-                      href={{ pathname: '/products', query: typeQueryObj }}
-                      className={`block px-4 py-2 rounded transition font-medium ${typeQuery === type ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
-                    >
-                      {type}
-                    </Link>
+      <section className="flex-grow px-2 py-12 max-w-[90vw] mx-auto w-full flex flex-col gap-8">
+        {/* Collapsible Filters Dropdown */}
+        <div className="max-w-2xl w-full mx-auto mb-8">
+          <details className="glassmorphic p-6 rounded-2xl shadow-lg border border-white/20 group" open>
+            <summary className="flex items-center gap-2 text-lg font-semibold text-white cursor-pointer select-none outline-none focus:ring-2 focus:ring-white px-3 py-2 rounded mb-4 transition-colors group-open:bg-white/10 hover:bg-white/10">
+              <span className="tracking-wide">Filters</span>
+              <span className="ml-1 flex items-center">
+                <img
+                  src="/icons/chevron-down.png"
+                  alt="Show filters"
+                  className="w-5 h-5 transition-transform duration-200 group-open:rotate-180"
+                  style={{ transform: 'rotate(var(--chevron-rotation, 0deg))' }}
+                />
+              </span>
+            </summary>
+            <form action="/products" method="get" className="flex flex-col gap-6">
+              <div>
+                <h3 className="text-lg font-bold mb-2 text-white">Product Type</h3>
+                <ul className="space-y-2 mb-4">
+                  <li>
+                    {(() => {
+                      const allQuery: Record<string, string> = {};
+                      Object.entries(searchParams).forEach(([key, value]) => {
+                        if (typeof value === 'string') allQuery[key] = value;
+                      });
+                      allQuery.page = '1';
+                      return (
+                        <Link
+                          href={{ pathname: '/products', query: allQuery }}
+                          className={`block px-4 py-2 rounded transition font-medium ${!typeQuery ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
+                        >
+                          All
+                        </Link>
+                      );
+                    })()}
                   </li>
-                );
-              })}
-            </ul>
-            {/* Price Slider */}
-            <form className="mb-8" action="/products" method="get">
-              {/* Keep other filters in the query */}
-              {typeQuery && <input type="hidden" name="type" value={typeQuery} />}
-              <input type="hidden" name="search" value={getSearchParam(searchParams)} />
-              <h3 className="text-lg font-bold mb-2 text-white">Price Range</h3>
-              <div className="flex items-center justify-between text-sm mb-2 text-white">
-                <span>${selectedMin}</span>
-                <span>${selectedMax}</span>
+                  {types.map((type: any) => {
+                    const typeQueryObj: Record<string, string> = {};
+                    Object.entries(searchParams).forEach(([key, value]) => {
+                      if (typeof value === 'string') typeQueryObj[key] = value;
+                    });
+                    typeQueryObj.type = type;
+                    typeQueryObj.page = '1';
+                    return (
+                      <li key={type}>
+                        <Link
+                          href={{ pathname: '/products', query: typeQueryObj }}
+                          className={`block px-4 py-2 rounded transition font-medium ${typeQuery === type ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/80'}`}
+                        >
+                          {type}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="range"
-                  name="minPrice"
-                  min={minPrice}
-                  max={selectedMax}
-                  defaultValue={selectedMin}
-                  className="custom-black-slider"
-                  step="1"
-                />
-                <input
-                  type="range"
-                  name="maxPrice"
-                  min={selectedMin}
-                  max={maxPrice}
-                  defaultValue={selectedMax}
-                  className="custom-black-slider"
-                  step="1"
-                />
-              </div>
-              <div className="flex items-center justify-between mt-4 mb-2">
-                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
-                  <span className="text-gray-200 mr-1">$</span>
+              <div>
+                <h3 className="text-lg font-bold mb-2 text-white">Price Range</h3>
+                <div className="flex items-center justify-between text-sm mb-2 text-white">
+                  <span>${selectedMin}</span>
+                  <span>${selectedMax}</span>
+                </div>
+                <div className="flex flex-col gap-2">
                   <input
-                    type="number"
+                    type="range"
                     name="minPrice"
                     min={minPrice}
                     max={selectedMax}
                     defaultValue={selectedMin}
-                    className="w-16 text-center outline-none bg-transparent text-white"
+                    className="custom-black-slider"
+                    step="1"
                   />
-                </div>
-                <span className="mx-2 text-gray-200">to</span>
-                <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
-                  <span className="text-gray-200 mr-1">$</span>
                   <input
-                    type="number"
+                    type="range"
                     name="maxPrice"
                     min={selectedMin}
                     max={maxPrice}
                     defaultValue={selectedMax}
-                    className="w-16 text-center outline-none bg-transparent text-white"
+                    className="custom-black-slider"
+                    step="1"
                   />
                 </div>
+                <div className="flex items-center justify-between mt-4 mb-2">
+                  <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
+                    <span className="text-gray-200 mr-1">$</span>
+                    <input
+                      type="number"
+                      name="minPrice"
+                      min={minPrice}
+                      max={selectedMax}
+                      defaultValue={selectedMin}
+                      className="w-16 text-center outline-none bg-transparent text-white"
+                    />
+                  </div>
+                  <span className="mx-2 text-gray-200">to</span>
+                  <div className="flex items-center border border-gray-400 rounded px-2 py-1 bg-white/10">
+                    <span className="text-gray-200 mr-1">$</span>
+                    <input
+                      type="number"
+                      name="maxPrice"
+                      min={selectedMin}
+                      max={maxPrice}
+                      defaultValue={selectedMax}
+                      className="w-16 text-center outline-none bg-transparent text-white"
+                    />
+                  </div>
+                </div>
+                <button type="submit" className="mt-3 w-full px-4 py-2 rounded bg-white/20 text-white font-medium hover:bg-white/30 transition">Apply</button>
               </div>
-              <button type="submit" className="mt-3 w-full px-4 py-2 rounded bg-white/20 text-white font-medium hover:bg-white/30 transition">Apply</button>
             </form>
-          </div>
-        </aside>
+          </details>
+        </div>
         {/* Products grid */}
         <div className="flex-1">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold tracking-tight text-white">Products</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-white">Our products</h2>
             {/* Search Bar */}
             <form className="flex" action="/products" method="get">
               <input

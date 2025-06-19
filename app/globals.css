@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --6-x-position: 20%;
+  --6-y-position: 80%;
+  --7-x-position: 80%;
+  --7-y-position: 20%;
+  --8-x-position: 80%;
+  --8-y-position: 80%;
+  --9-x-position: 50.50781250000001%;
+  --9-y-position: 49.72656250000001%;
 }
 
 @theme inline {
@@ -68,4 +76,77 @@ input[type="range"].custom-black-slider::-moz-range-track {
 input[type="range"].custom-black-slider::-ms-fill-lower,
 input[type="range"].custom-black-slider::-ms-fill-upper {
   background: #111;
+}
+
+.gradient-background {
+  background: 
+    radial-gradient(60% 60% at var(--6-x-position) var(--6-y-position), rgba(97,23,124,0.5) -10%, transparent 70%),
+    radial-gradient(100% 100% at var(--7-x-position) var(--7-y-position), #5c0700 -32%, transparent),
+    radial-gradient(100% 100% at var(--8-x-position) var(--8-y-position), #002e7a -31%, transparent),
+    radial-gradient(100% 100% at var(--9-x-position) var(--9-y-position), #d95000 -16%, transparent),
+    #000000;
+  animation-name: main;
+  animation-iteration-count: infinite;
+  animation-duration: 12s;
+  transition-timing-function: ease-in;
+}
+
+@property --6-x-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 20%;
+}
+@property --6-y-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 80%;
+}
+@property --7-x-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 80%;
+}
+@property --7-y-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 20%;
+}
+@property --8-x-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 80%;
+}
+@property --8-y-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 80%;
+}
+@property --9-x-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 50.50781250000001%;
+}
+@property --9-y-position {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 49.72656250000001%;
+}
+
+@keyframes main {
+  25% {
+    --6-x-position: 15%;
+    --6-y-position: 15%;
+    --7-x-position: 85%;
+    --7-y-position: 80%;
+  }
+  50% {
+    --6-x-position: 80%;
+    --6-y-position: 15%;
+    --7-x-position: 15%;
+    --7-y-position: 85%;
+    --8-x-position: 20%;
+    --8-y-position: 20%;
+    --9-x-position: 20%;
+    --9-y-position: 20%;
+  }
 }
