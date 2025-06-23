@@ -1,10 +1,12 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import Link from 'next/link';
 
 interface Product {
   image: string;
   name: string;
   description?: string;
+  id: string;
 }
 
 export default function ProductCarousel({ products }: { products: Product[] }) {
@@ -44,11 +46,11 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
             className="min-w-0 flex-1 flex justify-center"
             style={{ width: `${100 / displayProducts.length}%` }}
           >
-            <div className="min-w-[220px] max-w-xs bg-white/10 border border-white/20 rounded-2xl shadow-lg p-4 flex flex-col items-center glassmorphic backdrop-blur-md transition hover:scale-105 cursor-pointer">
+            <Link href={`/products/${product.id}`} className="min-w-[220px] max-w-xs bg-white/10 border border-white/20 rounded-2xl shadow-lg p-4 flex flex-col items-center glassmorphic backdrop-blur-md transition hover:scale-105 cursor-pointer">
               <img src={product.image} alt={product.name} className="w-28 h-28 object-cover rounded-xl border border-white/20 mb-3" />
               <div className="font-bold text-white text-lg text-center mb-1">{product.name}</div>
               {product.description && <div className="text-white/70 text-sm text-center">{product.description}</div>}
-            </div>
+            </Link>
           </div>
         ))}
       </div>

@@ -30,14 +30,16 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`gradient-background ${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <div className="flex flex-col min-h-screen">
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <ConditionalBackground>
+            <div className="flex flex-col min-h-screen">
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </ConditionalBackground>
         </Providers>
       </body>
     </html>

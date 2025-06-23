@@ -1,68 +1,79 @@
+"use client";
 import React from 'react';
-import ConditionalBackground from '../components/ConditionalBackground';
-import QnAAccordion, { QnAItem } from '../components/QnAAccordion';
+import GradientBody from '../components/GradientBody';
 import Header from '../components/Header';
 
-const FAQPage = () => {
-  const faqs: QnAItem[] = [
+const faqData = [
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and Apple Pay. All payments are processed securely through Stripe."
+      question: "What is the warranty period?",
+      answer: "All ATK products come with a 1-year warranty covering manufacturing defects.",
+    },
+    {
+      question: "Is international shipping available?",
+      answer: "Yes, we ship worldwide. Shipping fees and delivery times vary by location.",
+    },
+    {
+      question: "Can I return the product?",
+      answer: "Returns are accepted within 30 days of delivery if the product is in original condition.",
     },
     {
       question: "How long does shipping take?",
-      answer: "Domestic orders typically arrive within 2-5 business days. International shipping can take 7-14 business days depending on the destination. Express shipping options are available at checkout."
+      answer: "Shipping times vary by location. Domestic orders typically arrive within 3-7 business days, while international orders may take 7-21 business days.",
     },
     {
-      question: "What is your return policy?",
-      answer: "We offer a 30-day return policy for unused items in their original packaging. Please visit our Returns page for detailed information about our return process."
+      question: "What payment methods are accepted?",
+      answer: "We accept all major credit cards, PayPal, and Stripe payments.",
     },
     {
-      question: "Do you offer international shipping?",
-      answer: "Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location. You can see exact shipping costs at checkout."
+      question: "How do I track my order?",
+      answer: "Once your order ships, you will receive a tracking number via email to monitor your shipment.",
     },
     {
-      question: "How can I track my order?",
-      answer: "Once your order ships, you'll receive a tracking number via email. You can also view your order status and tracking information in your account dashboard."
+      question: "Can I change or cancel my order?",
+      answer: "Orders can be changed or canceled within 24 hours of placement. Please contact our support team as soon as possible.",
     },
     {
-      question: "Are your products covered by warranty?",
-      answer: "Yes, all our products come with a minimum 1-year manufacturer warranty. Some products have extended warranty options available at purchase."
+      question: "Do you offer bulk or business discounts?",
+      answer: "Yes, we offer discounts for bulk and business orders. Please contact us for a custom quote.",
     },
-    {
-      question: "Do you offer bulk discounts?",
-      answer: "Yes, we offer special pricing for bulk orders. Please contact our sales team for a custom quote on bulk purchases."
-    },
-    {
-      question: "How do I clean and maintain my gaming peripherals?",
-      answer: "We recommend using compressed air for dust removal, and a slightly damp microfiber cloth for cleaning surfaces. Avoid using harsh chemicals that could damage the equipment."
-    }
-  ];
+];
 
+const FAQPage = () => {
   return (
-    <ConditionalBackground>
-      <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
-        <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
+    <GradientBody>
         <Header />
-        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Hero Section */}
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Frequently Asked Questions
-              </h1>
-              <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-                Find answers to common questions about our products and services
-              </p>
-            </div>
+        <main className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                        Frequently Asked Questions
+                    </h1>
+                    <p className="text-xl text-gray-200 max-w-3xl mx-auto">
+                        Find answers to common questions about our products and services
+                    </p>
+                </div>
 
-            {/* FAQ Accordion */}
-            <QnAAccordion qna={faqs} />
-          </div>
-        </div>
-      </main>
-    </ConditionalBackground>
+                <div className="space-y-4">
+                    {faqData.map((item, idx) => (
+                        <details key={idx} className="backdrop-blur-sm bg-white/10 rounded-xl border border-white/20 overflow-hidden group">
+                            <summary className="cursor-pointer p-6 font-semibold text-lg text-white flex items-center justify-between group-hover:bg-white/5 transition">
+                                <span>{item.question}</span>
+                                <span className="transform transition-transform duration-300 group-open:rotate-180">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </span>
+                            </summary>
+                            <div className="p-6 border-t border-white/10 text-gray-200">
+                                <p>{item.answer}</p>
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            </div>
+        </main>
+    </GradientBody>
   );
 };
 
-export default FAQPage; 
+export default FAQPage;

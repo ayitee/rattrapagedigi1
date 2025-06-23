@@ -1,6 +1,10 @@
+
 # ATK Gaming - E-commerce Website
 
 A modern e-commerce platform for gaming peripherals built with Next.js 13, featuring a glassmorphic design and seamless user experience.
+
+## Project Repository
+Git Repository: [https://github.com/ayitee/rattrapagedigi1.git]
 
 ## Prerequisites
 

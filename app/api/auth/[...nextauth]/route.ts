@@ -16,42 +16,59 @@ const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            password: true,
-            role: true,
+        console.log('🔍 Auth attempt for:', credentials?.email);
+        
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.log('❌ Missing credentials');
+            return null;
           }
-        });
 
-        if (!user) {
+          console.log('🔍 Looking up user in database...');
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email
+            },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              password: true,
+              role: true,
+            }
+          });
+
+          console.log('👤 User found:', user ? 'Yes' : 'No');
+
+          if (!user) {
+            console.log('❌ User not found');
+            return null;
+          }
+
+          console.log('🔐 Comparing passwords...');
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          console.log('🔐 Password valid:', isPasswordValid);
+
+          if (!isPasswordValid) {
+            console.log('❌ Invalid password');
+            return null;
+          }
+
+          console.log('✅ Auth successful for:', user.email);
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('💥 Auth error:', error);
           return null;
         }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        return {
-          id: user.id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       }
     })
   ],
@@ -66,17 +83,13 @@ const authOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-      } else if (!token.role && token.email) {
-        // Fetch user from DB if role is missing (for session refresh)
-        const dbUser = await prisma.user.findUnique({ where: { email: token.email } });
-        if (dbUser) token.role = dbUser.role;
       }
       return token;
     },
     async session({ session, token }: { session: any, token: any }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).role = token.role;
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     }

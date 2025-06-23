@@ -23,6 +23,7 @@ interface Product {
   price: number;
   description: string;
   photo: string;
+  type: string;
 }
 
 export default function AdminProductsPage() {
@@ -30,39 +31,43 @@ export default function AdminProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editForm, setEditForm] = useState<Partial<Product>>({});
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState(true);
   const [feedback, setFeedback] = useState<string>("");
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/login");
-    } else if (session?.user?.role !== "ADMIN") {
-      router.replace("/");
-    } else {
+    if (status === "unauthenticated" || (session?.user?.role !== "admin" && session?.user?.role !== "superadmin")) {
+      window.location.href = "/";
+    } else if (status === "authenticated") {
       fetchProducts();
     }
-  }, [status, session, router]);
+  }, [status, session]);
 
   const fetchProducts = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("/api/products");
-      if (!response.ok) throw new Error("Failed to fetch products");
+      const response = await fetch(`/api/products?all=true`);
       const data = await response.json();
-      setProducts(data.map((p: any) => ({ ...p, id: Number(p.id) })));
-      setLoading(false);
+      if (!data || !data.data) throw new Error("Invalid data format");
+      setProducts(data.data);
+      setError(null);
     } catch (err) {
       setError("Failed to load products");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleSave = async () => {
+    if (!isAdding && !selectedProduct?.id) {
+      setFeedback("No product selected for editing.");
+      return;
+    }
     try {
       const method = isAdding ? "POST" : "PUT";
-      const url = isAdding ? "/api/products" : `/api/products/${selectedProduct?.id}`;
+      const url = isAdding ? "/api/products" : `/api/products/${selectedProduct!.id}`;
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -79,7 +84,7 @@ export default function AdminProductsPage() {
       }
 
       setFeedback(isAdding ? "Product created successfully!" : "Product updated successfully!");
-      setIsAdding(false);
+      setIsAdding(true);
       setSelectedProduct(null);
       setEditForm({});
       setTimeout(() => setFeedback(""), 3000);
@@ -126,7 +131,7 @@ export default function AdminProductsPage() {
     );
   }
 
-  if (!session || session.user?.role !== "ADMIN") {
+  if (!session || (session.user?.role !== "admin" && session.user?.role !== "superadmin")) {
     return null;
   }
 
@@ -224,6 +229,25 @@ export default function AdminProductsPage() {
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Type
+                      </label>
+                      <select
+                        value={editForm.type || ""}
+                        onChange={(e) => setEditForm({ ...editForm, type: e.target.value })}
+                        className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      >
+                        <option value="" disabled>Select type</option>
+                        <option value="keyboard">Keyboard</option>
+                        <option value="mouse">Mouse</option>
+                        <option value="mousepad">Mousepad</option>
+                        <option value="accessory">Accessory</option>
+                        <option value="audio">Audio</option>
+                      </select>
+                    </div>
+
                     <div className="flex gap-4">
                       <button
                         type="submit"
@@ -275,7 +299,7 @@ export default function AdminProductsPage() {
                           <img
                             src={product.photo}
                             alt={product.name}
-                            className="w-20 h-20 object-cover rounded-lg border border-white/20"
+                            className="w-20 h-20 object-cover ro safunded-lg border border-white/20"
                           />
                           <div className="flex-grow">
                             <h3 className="text-lg font-semibold text-white">

@@ -105,7 +105,7 @@ export default function LoginPage() {
                 <p className="text-gray-300">
                   Don't have an account?{" "}
                   <button
-                    onClick={() => router.push("/api/auth/register")}
+                    onClick={() => router.push("/register")}
                     className="text-blue-400 hover:text-blue-300 transition-colors"
                   >
                     Create one

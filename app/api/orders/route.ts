@@ -22,4 +22,9 @@ export async function GET(req: NextRequest) {
     },
   });
   return NextResponse.json(orders);
+}
+
+// Create a new order
+export async function POST(req: NextRequest) {
+  // ... existing code ...
 } 

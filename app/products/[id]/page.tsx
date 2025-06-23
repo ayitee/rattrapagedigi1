@@ -1,20 +1,23 @@
 'use client';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { SwitchSelector, QuantitySelector } from '../../components/SwitchAndQuantitySelectors';
 import Header from '../../components/Header';
 import { useCart } from '../../context/CartContext';
 import { useState, useEffect } from 'react';
+import GradientBody from '../../components/GradientBody';
 
-const switches = [
-  'Gateron II Magnetic Switch',
-  'ATK II Magnetic Switch',
-];
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  photo: string;
+  type: string;
+}
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [showAdded, setShowAdded] = useState<string | null>(null);
@@ -37,115 +40,72 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       });
   }, [params.id]);
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
-  if (error || !product) return notFound();
-
-  // Example Q&A data (replace with real data if available)
-  const qna = [
-    {
-      question: 'What is the warranty period?',
-      answer: 'All ATK products come with a 1-year warranty covering manufacturing defects.'
-    },
-    {
-      question: 'Is international shipping available?',
-      answer: 'Yes, we ship worldwide. Shipping fees and delivery times vary by location.'
-    },
-    {
-      question: 'Can I return the product?',
-      answer: 'Returns are accepted within 30 days of delivery if the product is in original condition.'
-    }
-  ];
-
-  // Extract bullet points from description if possible (for demo, split by '•' or fallback to full desc)
-  let details: string[] = [];
-  if (product.description.includes('•')) {
-    details = product.description.split('•').map((s: string) => s.trim()).filter(Boolean);
-  } else if (product.description.includes(' - ')) {
-    details = product.description.split(' - ').map((s: string) => s.trim()).filter(Boolean);
-  } else {
-    details = [product.description];
+  if (loading) {
+    return (
+      <GradientBody>
+        <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>
+      </GradientBody>
+    );
+  }
+  if (error || !product) {
+    return notFound();
   }
 
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+    setShowAdded(product.name);
+    setTimeout(() => setShowAdded(null), 2000);
+  };
+
   return (
-    <main className="min-h-screen bg-transparent text-black flex flex-col relative overflow-hidden">
-      <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="/background.jpeg"
-          alt="Background"
-          className="w-full h-full object-cover object-center"
-        />
-        {/* Overlay for contrast */}
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
-      {/* Header */}
+    <GradientBody>
       <Header />
-
-      <div className="max-w-5xl mx-auto w-full p-8">
-        <div className="flex flex-col md:flex-row gap-12 glassmorphic p-8 rounded-2xl shadow-lg border border-white/20">
-          {/* Image on the left */}
-          <div className="flex-shrink-0 flex justify-center items-center w-full md:w-1/2">
-            <img src={product.photo} alt={product.name} className="w-full max-w-xs h-auto object-cover rounded" />
-          </div>
-          {/* Info on the right */}
-          <div className="flex flex-col w-full md:w-1/2">
-            <h1 className="text-3xl font-bold mb-2 line-clamp-2 text-white">{product.name}</h1>
-            <div className="text-2xl font-semibold text-white mb-4">${product.price.toFixed(2)}</div>
-            {/* Switches selection (frontend only) */}
-            {product.type === 'keyboard' && <SwitchSelector switches={switches} />}
-            {/* Quantity selector (frontend only) */}
-            <div className="mb-4">
-              <QuantitySelector price={product.price} value={quantity} onChange={setQuantity} />
+      <main className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          {/* Main Product Section */}
+          <div className="grid md:grid-cols-2 gap-12 items-start backdrop-blur-sm bg-white/10 p-8 rounded-2xl border border-white/20">
+            {/* Image */}
+            <div className="flex justify-center items-center">
+              <img src={product.photo} alt={product.name} className="w-full max-w-sm h-auto object-cover rounded-lg" />
             </div>
-            <button
-              className="px-6 py-3 bg-white/20 text-white rounded font-semibold hover:bg-white/30 transition mb-4"
-              onClick={() => {
-                addToCart({ id: product.id, name: product.name, price: product.price, photo: product.photo }, quantity);
-                setShowAdded(product.name);
-                setTimeout(() => setShowAdded(null), 2000);
-              }}
-            >
-              Add to Cart
-            </button>
-            {showAdded && (
-              <div className="mb-4 px-4 py-2 bg-emerald-900/80 text-white rounded shadow text-center font-semibold animate-fade-in border border-white/20">
-                {showAdded} added to cart
+            
+            {/* Info */}
+            <div className="flex flex-col h-full">
+              <h1 className="text-3xl font-bold text-white mb-3">{product.name}</h1>
+              <div className="text-2xl font-semibold text-white/90 mb-6">${product.price.toFixed(2)}</div>
+              
+              <div className="mb-6 flex items-center gap-4">
+                <label className="text-white font-medium">Quantity</label>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-lg hover:bg-white/20 transition">-</button>
+                  <span className="w-12 text-center text-white font-semibold">{quantity}</span>
+                  <button onClick={() => setQuantity(q => q + 1)} className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-lg hover:bg-white/20 transition">+</button>
+                </div>
               </div>
-            )}
+              
+              <button
+                className="w-full px-6 py-3 bg-blue-600/20 text-blue-300 rounded-lg hover:bg-blue-600/30 transition-colors duration-200 font-semibold"
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </button>
+              
+              {showAdded && (
+                <div className="mt-4 px-4 py-2 bg-green-500/20 text-green-300 rounded-lg text-center font-semibold animate-fade-in border border-green-500/30">
+                  {showAdded} added to cart
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        {/* Description below */}
-        <div className="mt-10 glassmorphic p-6 rounded-2xl border border-white/20">
-          <h2 className="text-xl font-bold mb-2 text-white">Description</h2>
-          <p className="text-white/80 text-base md:text-lg">{product.description}</p>
-        </div>
-      </div>
-      {/* Q&A Accordion with extra spacing */}
-      <div className="max-w-5xl mx-auto w-full px-8 pb-12 mt-16">
-        <div className="glassmorphic p-6 rounded-2xl border border-white/20">
-          <h2 className="text-2xl font-bold mb-4 text-white">Q&amp;A</h2>
-          <div className="space-y-4">
-            {qna.map((item, idx) => (
-              <details key={idx} className="border rounded border-white/20 group">
-                <summary className="cursor-pointer px-4 py-3 font-medium select-none focus:outline-none focus:ring-2 focus:ring-white text-white/90 flex items-center justify-between gap-2 group-open:bg-white/10 group-open:font-bold">
-                  <span>{item.question}</span>
-                  <span className="ml-2 flex items-center">
-                    <img
-                      src="/icons/chevron-down.png"
-                      alt="Show answer"
-                      className="w-5 h-5 transition-transform duration-300 group-open:rotate-180"
-                    />
-                  </span>
-                </summary>
-                <div className="px-4 py-3 text-white/80 border-t border-white/10 bg-white/5">{item.answer}</div>
-              </details>
-            ))}
+          
+          {/* Description */}
+          <div className="mt-10 backdrop-blur-sm bg-white/10 p-8 rounded-2xl border border-white/20">
+            <h2 className="text-2xl font-bold text-white mb-4">Description</h2>
+            <p className="text-white/80 text-base md:text-lg whitespace-pre-line">{product.description}</p>
           </div>
+          
         </div>
-      </div>
-      {/* Footer */}
-
-    </main>
+      </main>
+    </GradientBody>
   );
 } 

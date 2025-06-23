@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { PrismaClient } from '@prisma/client';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/route';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -14,10 +14,31 @@ export async function GET(request: NextRequest) {
   if (!session || !(await isAdmin(session))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const users = await prisma.user.findMany({
-    select: { id: true, name: true, email: true, role: true, createdAt: true }
-  });
-  return NextResponse.json(users);
+
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = parseInt(searchParams.get('limit') || '12', 10);
+  const skip = (page - 1) * limit;
+
+  try {
+    const [users, total] = await prisma.$transaction([
+      prisma.user.findMany({
+        select: { id: true, name: true, email: true, role: true, createdAt: true },
+        skip,
+        take: limit,
+      }),
+      prisma.user.count(),
+    ]);
+    return NextResponse.json({
+      data: users,
+      total,
+      page,
+      limit,
+    });
+  } catch (error) {
+    console.error('GET /api/users error:', error);
+    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
+  }
 }
 
 export async function PUT(request: NextRequest) {

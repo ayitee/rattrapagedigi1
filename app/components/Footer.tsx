@@ -126,20 +126,10 @@ const Footer = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-              <p className="text-gray-400">
-                © {currentYear} ATK Gaming
-              </p>
-            </div>
-            <div className="mt-4 md:mt-0">
-              <p className="text-gray-400 text-sm">
-                Made with ❤️ for gamers
-              </p>
-            </div>
-          </div>
+        <div className="mt-12 pt-8 border-t border-white/10 text-center">
+          <p className="text-sm text-gray-400">
+            © {currentYear} ATK Gaming. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

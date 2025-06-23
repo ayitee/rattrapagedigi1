@@ -4,6 +4,7 @@ import React from 'react';
 interface PriceFilterProps {
   minPrice: number;
   maxPrice: number;
+  highestPrice: number;
   onMinPriceChange: (value: number) => void;
   onMaxPriceChange: (value: number) => void;
 }
@@ -11,6 +12,7 @@ interface PriceFilterProps {
 const PriceFilter: React.FC<PriceFilterProps> = ({
   minPrice,
   maxPrice,
+  highestPrice,
   onMinPriceChange,
   onMaxPriceChange,
 }) => {
@@ -26,7 +28,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
         <input
           type="range"
           min={0}
-          max={1000}
+          max={highestPrice}
           value={minPrice}
           onChange={(e) => onMinPriceChange(Number(e.target.value))}
           className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
@@ -34,7 +36,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
         <input
           type="range"
           min={0}
-          max={1000}
+          max={highestPrice}
           value={maxPrice}
           onChange={(e) => onMaxPriceChange(Number(e.target.value))}
           className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"

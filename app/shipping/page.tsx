@@ -8,16 +8,6 @@ const ShippingPage = () => {
     <GradientBody>
       <main className="min-h-screen flex flex-col bg-transparent text-black relative overflow-hidden">
         <div aria-hidden="true" className="h-20 md:h-24 w-full"></div>
-        {/* Background image */}
-        <div className="absolute inset-0 -z-10">
-          <img
-            src="/background.jpeg"
-            alt="Background"
-            className="w-full h-full object-cover object-center"
-          />
-          {/* Overlay for contrast */}
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
         <Header />
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">

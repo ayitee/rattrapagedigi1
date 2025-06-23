@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
-    const { firstname, lastname, email, password } = await request.json();
+    const { name, email, password } = await request.json();
 
     // Validate input
-    if (!firstname || !lastname || !email || !password) {
+    if (!name || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Create user
     const user = await prisma.user.create({
       data: {
-        name: `${firstname} ${lastname}`,
+        name,
         email,
         password: hashedPassword,
         role: 'user',

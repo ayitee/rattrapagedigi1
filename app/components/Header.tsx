@@ -64,7 +64,7 @@ export default function Header() {
         className={`fixed left-1/2 -translate-x-1/2 top-4 w-[95vw] max-w-5xl flex items-center justify-between px-4 md:px-8 py-3 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full shadow-xl z-50 transition-all duration-300 ${menuOpen ? 'opacity-0 pointer-events-none' : ''}`}
       >
         <Link href="/" className="flex items-center z-40">
-          <img src="/logo.png" alt="Vellux Logo" className="h-10 w-auto" />
+          <img src="/Logo.png" alt="Vellux Logo" className="h-10 w-auto" />
         </Link>
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">{navLinks}</nav>

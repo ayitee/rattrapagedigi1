@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // ... existing code ...
+});
 
 export async function POST(req: NextRequest) {
-  const { cart } = await req.json();
-  if (!cart || !Array.isArray(cart) || cart.length === 0) {
+  const { items } = await req.json();
+  if (!items || !Array.isArray(items) || items.length === 0) {
     return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
   }
   // Get user from session (must be logged in)
@@ -21,7 +23,7 @@ export async function POST(req: NextRequest) {
   try {
     const stripeSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: cart.map((item: any) => ({
+      line_items: items.map((item: any) => ({
         price_data: {
           currency: "usd",
           product_data: {
@@ -37,7 +39,7 @@ export async function POST(req: NextRequest) {
       success_url: `${baseUrl}/checkout/success`,
       cancel_url: `${baseUrl}/checkout/cancel`,
       metadata: {
-        cart: JSON.stringify(cart),
+        cart: JSON.stringify(items),
         userId: String(userId),
       },
     });
